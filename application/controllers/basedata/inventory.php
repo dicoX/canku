@@ -339,9 +339,12 @@ class Inventory extends CI_Controller
             if (!empty($data['customerPrice'])) {
                 foreach ($data['customerPrice'] as $v) {
                     $m['price'] = empty($v['price']) ? 0 : $v['price'];
+					
                     $unit = $this->mysql_model->get_row(CUSTOMERPRICE, '(goods_id=' . $id . ') and contact_id=' . $v['id']);
-                    if (isset($unit['id']) && !empty($unit['discount'])) {
-                        $this->mysql_model->update(CUSTOMERPRICE, $m, '(goods_id=' . $id . ') and contact_id=' . $v['id']);
+					// str_alert(200, 'success', isset($unit['id']));
+                    if (isset($unit['id']) && (!empty($unit['price'] || 0 == $unit['price']))) {
+                        //$this->mysql_model->update(CUSTOMERPRICE, $m, '(goods_id=' . $id . ') and contact_id=' . $v['id']);
+						$this->mysql_model->update(CUSTOMERPRICE, array('price' => $v['price']), '(goods_id=' . $id . ') and contact_id=' . $unit['contact_id']);
                     } else {
                         $m['contact_id'] = $v['id'];
                         $m['goods_id'] = $id;
@@ -505,7 +508,7 @@ class Inventory extends CI_Controller
                 $v[$arr]['invSerNumList'] = '';
             }
             $data['propertys'] = $v;
-            $customerPrice = $this->mysql_model->get_results(CUSTOMERPRICE, '(goods_id=' . $id . ')');
+            $customerPrice = $this->mysql_model->get_results(CUSTOMERPRICE, '(goods_id = ' . $id . ')');
             foreach ($customerPrice as $item) {
                 $c['id'] = $item['contact_id'];
                 $c['price'] = $item['price'];

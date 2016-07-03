@@ -168,7 +168,7 @@ class InvSa extends CI_Controller
             } else {
                 $this->db->trans_commit();
                 $this->common_model->logs('新增出貨 單據編號：' . $data['billNo']);
-                str_alert(200, 'success', array('id' => intval($iid)));
+                str_alert(200, 'success', array('id' => intval($iid), 'billNo'=>str_no('XS')));
             }
         }
         str_alert(-1, '提交的是空数据');
@@ -642,7 +642,7 @@ class InvSa extends CI_Controller
             count($invoice) < 1 && str_alert(-1, '单据不存在、或者已删除');
             $data['billNo'] = $invoice['billNo'];
         } else {
-            $data['billNo'] = str_no('XS');    //修改的时候屏蔽
+            // $data['billNo'] = str_no('XS');    //修改的时候屏蔽
         }
 
         $data['buId'] = intval($data['buId']);

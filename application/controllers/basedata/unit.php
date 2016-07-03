@@ -68,15 +68,22 @@ class Unit extends CI_Controller
         $rate = element('rate', $data);
         $this->db->trans_begin();
         if (count($data) > 0) {
+			// str_alert(200, 'success', );
             $data = $this->validform($data);
             $sql = $this->mysql_model->update(UNIT, elements(array('name', 'default'), $data), '(id=' . $id . ')');
             foreach ($rate as $item) {
-                $unit = $this->mysql_model->get_row(UNITPRICE, '(unitId=' . $id . ') and to_unitId=' . $item['id'], 'discount');
-                if (!empty($unit)) {
-                    $this->mysql_model->update(UNITPRICE, array('discount' => $item['rate']), '(unitId=' . $id . ') and to_unitId=' . $item['id']);
-                } else {
-                    $this->mysql_model->insert(UNITPRICE, array('unitId' => $id, 'to_unitId' => $item['id'], 'discount' => $item['rate']));
-                }
+				
+                $unit = $this->mysql_model->get_row(UNITPRICE, '(unitId=' . $id . ') and (to_unitId=' . $item['id'].') ', 'discount');
+				if($unit != $item['rate'])
+				{
+					// str_alert(200, 'success', $unit.$item['id']);
+					if (!empty($unit) || 0 == $unit) {
+						$this->mysql_model->update(UNITPRICE, array('discount' => $item['rate']), '(unitId=' . $id . ') and to_unitId=' . $item['id']);
+					} else {
+						$this->mysql_model->insert(UNITPRICE, array('unitId' => $id, 'to_unitId' => $item['id'], 'discount' => $item['rate']));
+					}
+				}
+				
             }
             if ($sql) {
                 $data['id'] = $id;

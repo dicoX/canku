@@ -5,9 +5,14 @@ function init() {
         if (200 === a.status) {
             (rowData = a.data, initField(), initEvent(), initGrid(rowData.propertys))
             var customer = rowData.customerPrice;
-            for(var i in customer){
-                $('.custonmer_'+customer[i].id).val(customer[i].price);
-            }
+            setTimeout(function(){
+				for(var i in customer){
+					$('.custonmer_'+customer[i].id).val(customer[i].price);
+				}
+			},500)
+			
+			var protype = rowData.propertys;
+			setTimeout(setGridFooter,500)
         } else {
             parent.parent.Public.tips({
                 type: 1,
