@@ -1,0 +1,1 @@
+{"areas_get_response":{"areas":{"area":[{"id":1,"name":"中国","parent_id":0,"type":1},{"id":820000,"name":"澳門特別行政區","parent_id":1,"type":2},{"id":820100,"name":"澳門半島","parent_id":820000,"type":3},{"id":820200,"name":"澳門離島","parent_id":820000,"type":3}]}}}
