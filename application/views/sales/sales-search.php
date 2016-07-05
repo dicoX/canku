@@ -51,6 +51,12 @@ $(document).keydown(function(event) {
         <label>收款状态:</label>
         <span id="hxState"></span>
         </li>
+	  <li>
+        <label>客戶:</label>
+        <span class="ui-combo-wrap" id="customer">
+          <input type="text" name="" class="input-txt" autocomplete="off" value="" data-ref="date">
+          <i class="ui-icon-ellipsis"></i></span></dd>
+	</li>
     </ul>
   </div>
 </div>
