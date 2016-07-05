@@ -250,7 +250,7 @@ class Inventory extends CI_Controller
         if ($data) {
             $v = '';
             $data = $this->validform($data);
-            $this->mysql_model->get_count(GOODS, '(number="' . $data['number'] . '")') > 0 && str_alert(-1, '商品編碼重複商品编号重复');
+            $this->mysql_model->get_count(GOODS, '(number="' . $data['number'] . '") and isDelete = 0 ') > 0 && str_alert(-1, '商品編碼重複商品编号重复');
             $this->db->trans_begin();
             $info = array(
                 'barCode', 'baseUnitId', 'unitName', 'categoryId', 'categoryName',
@@ -379,7 +379,7 @@ class Inventory extends CI_Controller
             if ($sql) {
                 $name = array_column($data, 'name');
                 $this->common_model->logs('删除商品:ID=' . $id . ' 名称:' . join(',', $name));
-                str_alert(200, 'success', array('msg' => '', 'id' => '[' . $id . ']'));
+                str_alert(200, 'success', array('msg' => '删除商品成功', 'id' => array($id) ));
             }
             str_alert(-1, '删除失败');
         }
@@ -525,7 +525,8 @@ class Inventory extends CI_Controller
         !isset($data['name']) || strlen($data['name']) < 1 && str_alert(-1, '商品名稱不能留空');
         !isset($data['number']) || strlen($data['number']) < 1 && str_alert(-1, '商品編碼不能及時');
         !isset($data['categoryId']) || strlen($data['categoryId']) < 1 && str_alert(-1, '商品類別不能留空。');
-        !isset($data['baseUnitId']) || strlen($data['baseUnitId']) < 1 && str_alert(-1, '計量單位不能留空。');
+        !isset($data['baseUnitId']) || $data['baseUnitId'] == 0 && str_alert(-1, '計量單位不能留空。');
+		!isset($data['locationId']) || $data['locationId'] == 0 && str_alert(-1, '倉庫不能留空');
         $data['purPrice'] = $data['purPrice'] ? $data['purPrice'] : 0;
         $data['salePrice'] = $data['salePrice'] ? $data['salePrice'] : 0;
         $data['vipPrice'] = $data['vipPrice'] ? $data['vipPrice'] : 0;

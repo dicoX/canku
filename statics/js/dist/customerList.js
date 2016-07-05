@@ -295,6 +295,7 @@ var searchFlag = !1,
 		callback: function(a, b, c) {
 			var d = $("#grid").data("gridData");
 			d || (d = {}, $("#grid").data("gridData", d)), a.difMoney = a.amount - a.periodMoney, d[a.id] = a, "edit" == b ? ($("#grid").jqGrid("setRowData", a.id, a), c && c.api.close()) : ($("#grid").jqGrid("addRowData", a.id, a, "first"), c && c.resetForm(a))
+			$(".ui_close").trigger("click");
 		}
 	};
 initDom(), initGrid(), initEvent();

@@ -125,8 +125,8 @@ class SettAcct extends CI_Controller {
         !isset($data['name']) || strlen($data['name']) < 1 && str_alert(-1,'名称不能为空');
 		!isset($data['number']) || strlen($data['number']) < 1 && str_alert(-1,'编号不能为空');
 		$where = isset($data['id']) ? ' and (id<>'.$data['id'].')' :'';
-		$this->mysql_model->get_count(ACCOUNT,'(name="'.$data['name'].'") '.$where) > 0 && str_alert(-1,'名称重复');
-		$this->mysql_model->get_count(ACCOUNT,'(number="'.$data['number'].'") '.$where) > 0 && str_alert(-1,'编号重复');
+		$this->mysql_model->get_count(ACCOUNT,'(name="'.$data['name'].'") and isDelete =0 '.$where) > 0 && str_alert(-1,'名称重复');
+		$this->mysql_model->get_count(ACCOUNT,'(number="'.$data['number'].'") and isDelete =0 '.$where) > 0 && str_alert(-1,'编号重复');
 		return $data;
 	}  
 }

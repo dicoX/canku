@@ -295,6 +295,7 @@ var defaultPage = Public.getDefaultPage(),
 				var e = $("#grid").jqGrid("getRowData", a.id);
 				e.name ? $("#grid").jqGrid("setRowData", a.id, a) : $("#grid").jqGrid("addRowData", a.id, a, "last"), c && c.api.close()
 			} else $("#grid").jqGrid("addRowData", a.id, a, "last"), c && c.resetForm(a)
+			$(".ui_close").trigger("click");
 		}
 	};
 $(function() {

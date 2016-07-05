@@ -153,6 +153,7 @@ var handle = {
 	callback: function(a, b, c) {
 		var d = $("#grid").data("gridData");
 		d || (d = {}, $("#grid").data("gridData", d)), d[a.id] = a, "edit" == b ? ($("#grid").jqGrid("setRowData", a.id, a), c && c.api.close()) : ($("#grid").jqGrid("addRowData", a.id, a, "last"), c && c.resetForm(a))
+		$(".ui_close").trigger("click");
 	},
 	del: function(a) {
 		$.dialog.confirm("刪除的倉庫資料將不能恢復，請慎重操作！", function() {

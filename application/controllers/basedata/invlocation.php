@@ -106,8 +106,8 @@ class Invlocation extends CI_Controller {
         !isset($data['name']) && strlen($data['name']) < 1 && str_alert(-1,'仓库名称不能为空');
 		!isset($data['locationNo']) && strlen($data['locationNo']) < 1 && str_alert(-1,'编号不能为空');
 		$where = isset($data['locationId']) ? ' and (id<>'.$data['locationId'].')' :'';
-		$this->mysql_model->get_count(STORAGE,'(name="'.$data['name'].'") '.$where) > 0 && str_alert(-1,'名称重复');
-		$this->mysql_model->get_count(STORAGE,'(locationNo="'.$data['locationNo'].'") '.$where) > 0 && str_alert(-1,'编号重复');
+		$this->mysql_model->get_count(STORAGE,'(name="'.$data['name'].'") and isDelete = 0 '.$where) > 0 && str_alert(-1,'名称重复');
+		$this->mysql_model->get_count(STORAGE,'(locationNo="'.$data['locationNo'].'") and isDelete = 0 '.$where) > 0 && str_alert(-1,'编号重复');
 		return $data;
 	}  
 	

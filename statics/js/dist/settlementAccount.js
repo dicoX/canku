@@ -177,6 +177,7 @@ $(function() {
 			callback: function(a, b, c) {
 				var d = $("#grid").data("gridData");
 				d || (d = {}, $("#grid").data("gridData", d)), d[a.id] = a, "edit" == b ? ($("#btn-refresh").trigger("click"), c && c.api.close()) : ($("#grid").jqGrid("addRowData", a.id, a, "last"), c && c.resetForm(a))
+				$(".ui_close").trigger("click");
 			},
 			pop: function(a, b, c) {
 				$.dialog({

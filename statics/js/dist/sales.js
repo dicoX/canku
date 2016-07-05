@@ -938,6 +938,7 @@ var curRow, curCol, loading, SYSTEM = system = parent.SYSTEM,
             b.salesCombo && Public.ajaxGet("../scm/invSa/findNearSaEmp?action=findNearSaEmp", {
                 buid: a.id
             }, function (a) {
+				// console.log('a.data.empId:::', a.data.empId);
                 a.data.empId && b.salesCombo.selectByValue(a.data.empId)
             })
         },
@@ -1476,6 +1477,7 @@ var curRow, curCol, loading, SYSTEM = system = parent.SYSTEM,
                 if ("" !== h.goods) {
                     var i = $("#" + g).data("goodsInfo");
                     if (i) {
+						console.log(i);
                         var j = $("#" + g).data("storageInfo");
                         if (!j || !j.id) return parent.Public.tips({
                             type: 2,
@@ -1495,7 +1497,7 @@ var curRow, curCol, loading, SYSTEM = system = parent.SYSTEM,
                             }
                         }
                         f = {
-                            invId: i.id,
+                            invId: i.gid || i.id,
                             invNumber: i.number,
                             invName: i.name,
                             invSpec: i.spec,

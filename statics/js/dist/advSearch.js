@@ -2,6 +2,7 @@ var queryConditions = {
 	matchCon: ""
 },
 	api = frameElement.api,
+	hideCustomerCombo = !1,
 	handle, urlParam = Public.urlParam(),
 	THISPAGE = {
 		init: function() {
@@ -9,12 +10,19 @@ var queryConditions = {
 		},
 		initDom: function() {
 			var a = api.data;
-			switch (this.$_matchCon = $("#matchCon"), this.$_beginDate = $("#beginDate").val(a.beginDate), this.$_endDate = $("#endDate").val(a.endDate), this.$_hxState = $("#hxState"), a.matchCon && "请输入单据号或客户名或备注" != a.matchCon ? (this.$_matchCon.removeClass("ui-input-ph"), this.$_matchCon.val(a.matchCon)) : (this.$_matchCon.addClass("ui-input-ph"), this.$_matchCon.placeholder()), this.$_beginDate.datepicker(), this.$_endDate.datepicker(), urlParam.type) {
+			switch (this.$_matchCon = $("#matchCon"), this.$_customer = $("#customer"), this.$_beginDate = $("#beginDate").val(a.beginDate), this.$_endDate = $("#endDate").val(a.endDate), this.$_hxState = $("#hxState"), a.matchCon && "请输入单据号或客户名或备注" != a.matchCon ? (this.$_matchCon.removeClass("ui-input-ph"), this.$_matchCon.val(a.matchCon)) : (this.$_matchCon.addClass("ui-input-ph"), this.$_matchCon.placeholder()), this.$_beginDate.datepicker(), this.$_endDate.datepicker(), urlParam.type) {
 			case "sales":
 				this.salesCombo = Business.salesCombo($("#sales"), {
 					defaultSelected: 0,
 					extraListHtml: ""
-				}), this.hxStateCombo = this.$_hxState.combo({
+				}), this.customerCombo = Business.billCustomerCombo($("#customer"), {
+                    defaultSelected: -1,
+					callback: {
+                        onChange: function (a) {
+                            console.log(a);
+                        }
+                    }
+                }), this.hxStateCombo = this.$_hxState.combo({
 					data: function() {
 						return [{
 							name: "未收款",
@@ -35,7 +43,11 @@ var queryConditions = {
 					cache: !1,
 					emptyOptions: !0
 				}).getCombo();
-				break;
+				hideCustomerCombo && this.customerCombo.disable(), $("#customer").data("callback", function (a) {
+					console.log(a);
+				})
+				console.log(THISPAGE.customerCombo);
+			break;
 			case "transfers":
 				this.outStorageCombo = $("#storageA").combo({
 					data: function() {
@@ -94,9 +106,17 @@ var queryConditions = {
 				}).getCombo(), -1 !== a.transTypeId && this.transTypeCombo.selectByValue(a.transTypeId)
 			}
 		},
-		addEvent: function() {},
+		addEvent: function() {
+			var that = this;
+			that.$_customer.on("click", function () {
+				b = that.$_customer.getCombo();
+                setTimeout(function () {
+                    b.active = !0, b.doQuery()
+                }, 10)
+			})
+		},
 		handle: function(a) {
-			switch (a = a || {}, a.matchCon = "请输入单据号或客户名或备注" === THISPAGE.$_matchCon.val() ? "" : THISPAGE.$_matchCon.val(), a.beginDate = THISPAGE.$_beginDate.val(), a.endDate = THISPAGE.$_endDate.val(), THISPAGE.hxStateCombo && (a.hxState = THISPAGE.hxStateCombo.getValue() ? THISPAGE.hxStateCombo.getValue() - 1 : ""), urlParam.type) {
+			switch (a = a || {}, a.matchCon = "请输入单据号或客户名或备注" === THISPAGE.$_matchCon.val() ? "" : THISPAGE.$_matchCon.val(), a.beginDate = THISPAGE.$_beginDate.val(), a.customer = THISPAGE.customerCombo.getValue(), a.endDate = THISPAGE.$_endDate.val(), THISPAGE.hxStateCombo && (a.hxState = THISPAGE.hxStateCombo.getValue() ? THISPAGE.hxStateCombo.getValue() - 1 : ""), urlParam.type) {
 			case "sales":
 				a.salesId = THISPAGE.salesCombo.getValue();
 				break;

@@ -250,9 +250,9 @@ class Contact extends CI_Controller {
 		$data['cCategoryName'] = $this->mysql_model->get_row(CATEGORY,'(id="'.$data['cCategory'].'")','name');
 		if (isset($data['id'])) {
 		    $data['id'] = intval($data['id']); 
-			$this->mysql_model->get_count(CONTACT,'(id<>'.$data['id'].') and (type='.$data['type'].') and (number="'.$data['number'].'")') > 0 && str_alert(-1,'編號重複');
+			$this->mysql_model->get_count(CONTACT,'(id<>'.$data['id'].') and (type='.$data['type'].') and isDelete = 0 and (number="'.$data['number'].'")') > 0 && str_alert(-1,'編號重複');
 		} else {
-		    $this->mysql_model->get_count(CONTACT,'(type='.$data['type'].') and (number="'.$data['number'].'")') > 0 && str_alert(-1,'編號重複');
+		    $this->mysql_model->get_count(CONTACT,'(type='.$data['type'].') and isDelete = 0 and (number="'.$data['number'].'")') > 0 && str_alert(-1,'編號重複');
 		}
 		return $data;
 	}  

@@ -711,6 +711,7 @@ class InvSa extends CI_Controller
                     }
                 }
                 $inventory = $this->data_model->get_invoice_info_inventory();
+				
             } else {
                 $item = $data['entries'];
             }
@@ -726,7 +727,8 @@ class InvSa extends CI_Controller
                 if ($system['requiredCheckStore'] == 1) {
                     if (intval($data['transType']) == 150601) {                        //销售才验证
                         if (isset($inventory[$row['invId']][$row['locationId']])) {
-                            $inventory[$row['invId']][$row['locationId']] < (float)$row['qty'] && str_alert(-1, $row['locationName'] . $row['invName'] . '商品库存不足！');
+							//str_alert(-1, "23" , $inventory);
+                            $inventory[$row['invId']][$row['locationId']] < (float)$row['qty'] && str_alert(-1, $row['locationName'] . $row['invName'] . '商品库存不足！', $row['invId']);
                         } else {
                             str_alert(-1, $row['invName'] . '库存不足！');
                         }
