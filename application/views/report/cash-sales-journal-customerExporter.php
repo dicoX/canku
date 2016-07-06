@@ -20,7 +20,7 @@
 				 <?php 
 				 foreach($list as $k => $row){
 				 ?>
-  			     <tr class="link">
+  			     <tr class="link" style="background: <?php echo $row['color']?>;" >
 				   <td><?php echo $row['billDate']?></td>
   			       <td><?php echo $row['billNo']?></td>
   			       <td><?php echo $row['hxStateTxt']?></td>

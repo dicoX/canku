@@ -1371,6 +1371,10 @@ class Report extends CI_Controller {
         foreach($list as $k => $v){
             $amount += $v['rpAmount'];
             $list[$k]['hxStateTxt'] = $hxStateTxt[$v['hxStateCode']];
+            $list[$k]['color'] = 'red';
+            if($v['hxStateCode'] == 2){
+                $list[$k]['color'] = 'green';
+            }
         }
         $total['rpAmount'] = $amount;
         $data = array(
@@ -1446,6 +1450,10 @@ class Report extends CI_Controller {
         foreach($list as $k => $v){
             $amount += $v['rpAmount'];
             $list[$k]['hxStateTxt'] = $hxStateTxt[$v['hxStateCode']];
+            $list[$k]['color'] = 'red';
+            if($v['hxStateCode'] == 2){
+                $list[$k]['color'] = 'green';
+            }
         }
         $total['rpAmount'] = $amount;
         $data = array(

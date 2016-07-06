@@ -21,7 +21,16 @@ define(["jquery", "print"], function(a) {
 			var f = k.profit;
 			h(f), i("#filter-menu").removeClass("ui-btn-menu-cur")
 		}), i("#filter-reset").on("click", function(a) {
-			a.preventDefault(), i("#filter-fromDate").val(k.beginDate), i("#filter-toDate").val(k.endDate), i("#filter-customer input").val(""), i("#filter-goods input").val(""), i("#filter-storage input").val(""), k.customerNo = "", k.goodsNo = "", k.storageNo = ""
+			a.preventDefault(), 
+            i("#filter-fromDate").val(k.beginDate), 
+            i("#filter-toDate").val(k.endDate), 
+            i("#filter-customer input").val(""), 
+            i("#filter-goods input").val(""), 
+            i("#filter-storage input").val(""), 
+            k.customerNo = "", 
+            k.goodsNo = "", 
+            k.storageNo = "",
+            k.hxStateCode = ""
 		})
 	}
 	function c() {
@@ -93,6 +102,12 @@ define(["jquery", "print"], function(a) {
             width: 0,
             hidden: !0,
 			align: "center" 
+        },{
+            name:"color",
+            label: "",
+            width: 0,
+            hidden: !0,
+			align: "center" 
         }],
 			g = "local",
 			h = "#";
@@ -148,7 +163,7 @@ define(["jquery", "print"], function(a) {
 					location: "合計："
 				}), i("table.ui-jqgrid-ftable").find('td[aria-describedby="grid_transTypeName"]').prevUntil().css("border-right-color", "#fff")
 			}
-		}), k.autoSearch ? (i(".no-query").remove(), i(".ui-print").show()) : i(".ui-print").hide()
+		}), k.autoSearch ? (i(".no-query").remove(), i(".ui-print").show()) : i(".ui-print").hide()        
 	}
 	function e(a) {
 		a && (e.h = a);
@@ -159,6 +174,11 @@ define(["jquery", "print"], function(a) {
 		c > d && (c = d), b < h.width() && (c += 17), i("#grid-wrap").height(function() {
 			return document.body.clientHeight - this.offsetTop - 36 - 5
 		}), h.jqGrid("setGridHeight", c), h.jqGrid("setGridWidth", b, !1)
+        
+        i("table.ui-jqgrid-btable").find('td[aria-describedby="grid_color"]').each(function(i){
+            var color = $(this).html();
+            $(this).parents('tr').css('background', color)
+        });
 	}
 	function f() {
 		return i(window).width() - i("#grid-wrap").offset().left - 36 - 20
