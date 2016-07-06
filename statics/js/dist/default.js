@@ -195,6 +195,12 @@ var dataReflush, list = {
 		dataRight: "SettAcctReport_QUERY",
 		target: "report-money"
 	},
+    cashSalesJournal: {
+		name: "現金銷售报表",
+		href: "../report/cash_sales_journal",
+		dataRight: "cashSalesReport_QUERY",
+		target: "report-money"
+	},
 	accountPayDetail: {
 		name: "應付賬款明細表",
 		href: "../report/account_pay_detail_new?action=detailSupplier&type=10",

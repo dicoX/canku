@@ -1306,6 +1306,158 @@ class Report extends CI_Controller {
 		$this->load->view('report/bankBalance-exporter', $data);	
 	}
  
+ 
+    public function cash_sales_journal(){
+        $this->load->view('report/cash-sales-journal');	
+    }
+    
+    public function cash_sales_journal_customer(){
+	    
+        $beginDate  = $this->input->get('beginDate', true);
+        $endDate    = $this->input->get('endDate', true);
+        $customerNo = $this->input->get('customerNo', true);
+        $hxStateCode = $this->input->get('hxStateCode', true);
+        $goodsNo = $this->input->get('goodsNo', true);
+        $storageNo = $this->input->get('storageNo', true);
+        
+        $where = ' 1 ';
+        if($beginDate) $where .= " and a.billDate >= '{$beginDate}' ";
+        if($endDate) $where .= " and a.billDate <= '{$endDate}' ";
+        if($customerNo) $where .= ' and b.number in('.str_quote($customerNo).') ';
+        if(!empty($hxStateCode)) $where .= " and a.hxStateCode = '{$hxStateCode}'";
+        if($goodsNo) $where .= ' and d.number in('.str_quote($goodsNo).') ';
+        if($storageNo) $where .= " and e.id = '{$storageNo}'";
+        
+        $order = ' a.billDate desc ';
+        $group = ' a.billNo ';
+        
+        $field = '  a.billDate, 
+                    a.billNo,
+                    a.hxStateCode,
+                    a.transTypeName,
+                    a.rpAmount,
+                    a.userName,
+                    b.number as customerNo,
+                    b.name as buName,
+                    c.invId,
+                    d.number as goodsNo,
+                    e.locationNo';
+                
+        $sql = "select {$field} from ".INVOICE." a 
+                    left join ".CONTACT." b on b.id = a.buId 
+                    left join ".INVOICE_INFO." c on c.billNo = a.billNo
+                    left join ".GOODS." d on d.id = c.invId
+                    left join ".STORAGE." e on e.id = c.locationId
+                    where {$where} 
+                    group by {$group}
+                    order by {$order}";
+        //echo $sql;
+        $list = $this->mysql_model->query(INVOICE, $sql, 2);
+        $total = array(
+            'billDate' => '',
+            'billNo' => '',
+            'hxStateCode' => '',
+            'transTypeName' => '合計：',
+            'rpAmount' => '',
+            'userName' => '',
+            'buName' => ''
+        );
+        $hxStateTxt = array(
+            '未付款',
+            '部分付款',
+            '全部付款'
+        );
+        $amount = 0;
+        foreach($list as $k => $v){
+            $amount += $v['rpAmount'];
+            $list[$k]['hxStateTxt'] = $hxStateTxt[$v['hxStateCode']];
+        }
+        $total['rpAmount'] = $amount;
+        $data = array(
+            'list' => $list,
+            'total' => $total
+        );
+        
+        //print_r($list);
+        echo json_encode(array( 'data'=> $data));
+        return;
+    }
+    
+    public function cash_sales_journal_customerExporter(){
+		$name = 'cash_sales_journal_customer_'.date('YmdHis').'.xls';
+		sys_csv($name);
+		$this->common_model->logs('导出現金銷售报表:'.$name);
+
+        $beginDate  = $this->input->post('beginDate', true);
+        $endDate    = $this->input->post('endDate', true);
+        $customerNo = $this->input->post('customerNo', true);
+        $hxStateCode = $this->input->post('hxStateCode', true);
+        $goodsNo = $this->input->post('goodsNo', true);
+        $storageNo = $this->input->post('storageNo', true);
+        
+        $where = ' 1 ';
+        if($beginDate) $where .= " and a.billDate >= '{$beginDate}' ";
+        if($endDate) $where .= " and a.billDate <= '{$endDate}' ";
+        if($customerNo) $where .= ' and b.number in('.str_quote($customerNo).') ';
+        if(!empty($hxStateCode)) $where .= " and a.hxStateCode = '{$hxStateCode}'";
+        if($goodsNo) $where .= ' and d.number in('.str_quote($goodsNo).') ';
+        if($storageNo) $where .= " and e.id = '{$storageNo}'";
+        
+        $order = ' a.billDate desc ';
+        $group = ' a.billNo ';
+        
+        $field = '  a.billDate, 
+                    a.billNo,
+                    a.hxStateCode,
+                    a.transTypeName,
+                    a.rpAmount,
+                    a.userName,
+                    b.number as customerNo,
+                    b.name as buName,
+                    c.invId,
+                    d.number as goodsNo,
+                    e.locationNo';
+                
+        $sql = "select {$field} from ".INVOICE." a 
+                    left join ".CONTACT." b on b.id = a.buId 
+                    left join ".INVOICE_INFO." c on c.billNo = a.billNo
+                    left join ".GOODS." d on d.id = c.invId
+                    left join ".STORAGE." e on e.id = c.locationId
+                    where {$where} 
+                    group by {$group}
+                    order by {$order}";
+        //echo $sql;
+        $list = $this->mysql_model->query(INVOICE, $sql, 2);
+        $total = array(
+            'billDate' => '',
+            'billNo' => '',
+            'hxStateCode' => '',
+            'transTypeName' => '合計：',
+            'rpAmount' => '',
+            'userName' => '',
+            'buName' => ''
+        );
+        $hxStateTxt = array(
+            '未付款',
+            '部分付款',
+            '全部付款'
+        );
+        $amount = 0;
+        foreach($list as $k => $v){
+            $amount += $v['rpAmount'];
+            $list[$k]['hxStateTxt'] = $hxStateTxt[$v['hxStateCode']];
+        }
+        $total['rpAmount'] = $amount;
+        $data = array(
+            'beginDate' => $beginDate,
+            'endDate' => $endDate,
+            'list' => $list,
+            'total' => $total
+        );        
+        
+		$this->load->view('report/cash-sales-journal-customerExporter',$data);	
+    }
+    
 	//应付账款明细表
 	public function account_pay_detail_new() {
 	    $this->common_model->checkpurview(52);
