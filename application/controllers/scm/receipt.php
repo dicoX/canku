@@ -41,8 +41,8 @@ class Receipt extends CI_Controller {
 		$matchCon  = str_enhtml($this->input->get_post('matchCon',TRUE));
 		$beginDate  = str_enhtml($this->input->get_post('beginDate',TRUE));
 		$endDate  = str_enhtml($this->input->get_post('endDate',TRUE));
-		$where  = ' and transType=153001'; 
-		$where .= $matchCon  ? ' and (contactName like "%'.$matchCon.'%" or description like "%'.$matchCon.'%" or billNo like "%'.$matchCon.'%")' : ''; 
+		$where  = ' and transType=153001 '; 
+		$where .= $matchCon  ? ' and (b.name like "%'.$matchCon.'%" or description like "%'.$matchCon.'%" or billNo like "%'.$matchCon.'%")' : ''; 
 		$where .= $beginDate ? ' and billDate>="'.$beginDate.'"' : ''; 
 		$where .= $endDate ? ' and billDate<="'.$endDate.'"' : ''; 
 		$offset = $rows * ($page-1);
@@ -92,7 +92,7 @@ class Receipt extends CI_Controller {
 		if (strlen($data)>0) {
 		     $data = (array)json_decode($data, true);
 			 $this->validform($data);
-			 $info['billNo']        = str_no('SKD');
+			 $info['billNo']        = $data['billNo'];//str_no('SKD');
 			 $info['billType']      = 'RECEIPT';
 			 $info['transType']     = 153001;
 			 $info['transTypeName'] = '收款';
@@ -149,7 +149,7 @@ class Receipt extends CI_Controller {
 			 } else {
 			    $this->db->trans_commit();
 				$this->common_model->logs('新增收款单 单据编号：'.$info['billNo']);
-				str_alert(200,'success',array('id'=>$iid)); 
+				str_alert(200,'success',array('id'=>$iid, 'billNo'=>str_no('SKD'))); 
 			 }
 		}
 		str_alert(-1,'提交的是空数据'); 

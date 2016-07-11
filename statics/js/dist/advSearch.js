@@ -3,6 +3,7 @@ var queryConditions = {
 },
 	api = frameElement.api,
 	hideCustomerCombo = !1,
+	cname = "",
 	handle, urlParam = Public.urlParam(),
 	THISPAGE = {
 		init: function() {
@@ -19,7 +20,7 @@ var queryConditions = {
                     defaultSelected: -1,
 					callback: {
                         onChange: function (a) {
-                            console.log(a);
+                            cname = !!a ? a.name : "";
                         }
                     }
                 }), this.hxStateCombo = this.$_hxState.combo({
@@ -44,9 +45,8 @@ var queryConditions = {
 					emptyOptions: !0
 				}).getCombo();
 				hideCustomerCombo && this.customerCombo.disable(), $("#customer").data("callback", function (a) {
-					console.log(a);
+					// console.log(a);
 				})
-				console.log(THISPAGE.customerCombo);
 			break;
 			case "transfers":
 				this.outStorageCombo = $("#storageA").combo({
@@ -116,7 +116,7 @@ var queryConditions = {
 			})
 		},
 		handle: function(a) {
-			switch (a = a || {}, a.matchCon = "请输入单据号或客户名或备注" === THISPAGE.$_matchCon.val() ? "" : THISPAGE.$_matchCon.val(), a.beginDate = THISPAGE.$_beginDate.val(), a.customer = THISPAGE.customerCombo.getValue(), a.endDate = THISPAGE.$_endDate.val(), THISPAGE.hxStateCombo && (a.hxState = THISPAGE.hxStateCombo.getValue() ? THISPAGE.hxStateCombo.getValue() - 1 : ""), urlParam.type) {
+			switch (a = a || {}, a.matchCon = "请输入单据号或客户名或备注" == THISPAGE.$_matchCon.val() ? "" : THISPAGE.$_matchCon.val(), a.beginDate = THISPAGE.$_beginDate.val(), a.contactName =  cname, a.endDate = THISPAGE.$_endDate.val(), THISPAGE.hxStateCombo && (a.hxState = THISPAGE.hxStateCombo.getValue() ? THISPAGE.hxStateCombo.getValue() - 1 : ""), urlParam.type) {
 			case "sales":
 				a.salesId = THISPAGE.salesCombo.getValue();
 				break;

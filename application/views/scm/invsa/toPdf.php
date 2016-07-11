@@ -25,7 +25,7 @@
 		
 		<table width="800" align="center">
 			<tr height="15" align="left">
-				<td width="525" style="font-family:'宋体';font-size:12px;height:20px;padding-left:35px;"><?php echo $contactNo.' '.$contactName?> </td>
+				<td width="625" style="font-family:'宋体';font-size:12px;height:20px;padding-left:35px;"><?php echo $contactNo.' '.$contactName?> </td>
 				<td width="120" style="font-family:'宋体'; font-size:12px;height:20px;"><?php echo $billNo?></td>
 			</tr>
 			<tr height="15" align="left">

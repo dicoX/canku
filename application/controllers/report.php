@@ -110,7 +110,7 @@ class Report extends CI_Controller {
 		$goodsNo    = str_enhtml($this->input->get_post('goodsNo',TRUE));
 		$beginDate  = str_enhtml($this->input->get_post('beginDate',TRUE));
 		$endDate    = str_enhtml($this->input->get_post('endDate',TRUE));
-		$where = ' and a.billType="PUR"';
+		$where = '  and a.billType="PUR"';
 		$where .= $storageNo ? ' and d.locationNo in('.str_quote($storageNo).')' : ''; 
 		$where .= $customerNo ? ' and c.number in('.str_quote($customerNo).')' : ''; 
 		$where .= $goodsNo ? ' and b.number in('.str_quote($goodsNo).')' : ''; 
@@ -172,7 +172,7 @@ class Report extends CI_Controller {
 		$goodsNo    = str_enhtml($this->input->get_post('goodsNo',TRUE));
 		$data['beginDate']  = $beginDate = str_enhtml($this->input->get_post('beginDate',TRUE));
 		$data['endDate']    = $endDate   = str_enhtml($this->input->get_post('endDate',TRUE));
-		$where = ' and a.billType="PUR"';
+		$where = '  and a.billType="PUR"';
 		$where .= $storageNo ? ' and d.locationNo in('.str_quote($storageNo).')' : ''; 
 		$where .= $customerNo ? ' and c.number in('.str_quote($customerNo).')' : ''; 
 		$where .= $goodsNo ? ' and b.number in('.str_quote($goodsNo).')' : ''; 
@@ -204,7 +204,7 @@ class Report extends CI_Controller {
 		$goodsNo    = str_enhtml($this->input->get_post('goodsNo',TRUE));
 		$beginDate  = str_enhtml($this->input->get_post('beginDate',TRUE));
 		$endDate    = str_enhtml($this->input->get_post('endDate',TRUE));
-		$where = ' and a.billType="PUR"';
+		$where = '   and a.billType="PUR"';
 		$where .= $storageNo ? ' and d.locationNo in('.str_quote($storageNo).')' : ''; 
 		$where .= $customerNo ? ' and c.number in('.str_quote($customerNo).')' : ''; 
 		$where .= $goodsNo ? ' and b.number in('.str_quote($goodsNo).')' : ''; 
@@ -265,7 +265,7 @@ class Report extends CI_Controller {
 		$goodsNo    = str_enhtml($this->input->get_post('goodsNo',TRUE));
 		$data['beginDate']  = $beginDate = str_enhtml($this->input->get_post('beginDate',TRUE));
 		$data['endDate']    = $endDate   = str_enhtml($this->input->get_post('endDate',TRUE));
-		$where = ' and a.billType="PUR"';
+		$where = '   and a.billType="PUR"';
 		$where .= $storageNo ? ' and d.locationNo in('.str_quote($storageNo).')' : ''; 
 		$where .= $customerNo ? ' and c.number in('.str_quote($customerNo).')' : ''; 
 		$where .= $goodsNo ? ' and b.number in('.str_quote($goodsNo).')' : ''; 
@@ -296,7 +296,7 @@ class Report extends CI_Controller {
 		$goodsNo    = str_enhtml($this->input->get_post('goodsNo',TRUE));
 		$beginDate  = str_enhtml($this->input->get_post('beginDate',TRUE));
 		$endDate    = str_enhtml($this->input->get_post('endDate',TRUE));
-		$where = ' and a.billType="PUR"';
+		$where = '   and a.billType="PUR"';
 		$where .= $storageNo ? ' and d.locationNo in('.str_quote($storageNo).')' : ''; 
 		$where .= $customerNo ? ' and c.number in('.str_quote($customerNo).')' : ''; 
 		$where .= $goodsNo ? ' and b.number in('.str_quote($goodsNo).')' : ''; 
@@ -360,7 +360,7 @@ class Report extends CI_Controller {
 		$goodsNo    = str_enhtml($this->input->get_post('goodsNo',TRUE));
 		$data['beginDate']  = $beginDate = str_enhtml($this->input->get_post('beginDate',TRUE));
 		$data['endDate']    = $endDate = str_enhtml($this->input->get_post('endDate',TRUE));
-		$where = ' and a.billType="PUR"';
+		$where = '   and a.billType="PUR"';
 		$where .= $storageNo ? ' and d.locationNo in('.str_quote($storageNo).')' : ''; 
 		$where .= $customerNo ? ' and c.number in('.str_quote($customerNo).')' : ''; 
 		$where .= $goodsNo ? ' and b.number in('.str_quote($goodsNo).')' : ''; 
@@ -394,7 +394,7 @@ class Report extends CI_Controller {
 		$goodsNo    = str_enhtml($this->input->get_post('goodsNo',TRUE));
 		$beginDate  = str_enhtml($this->input->get_post('beginDate',TRUE));
 		$endDate    = str_enhtml($this->input->get_post('endDate',TRUE));
-		$where = ' and a.billType="SALE"';
+		$where = '   and a.billType="SALE"';
 		$where .= $salesId ? ' and e.number  in('.str_quote($salesId).')' : ''; 
 		$where .= $storageNo ? ' and d.locationNo in('.str_quote($storageNo).')' : ''; 
 		$where .= $customerNo ? ' and c.number in('.str_quote($customerNo).')' : ''; 
@@ -464,7 +464,7 @@ class Report extends CI_Controller {
 		$goodsNo    = str_enhtml($this->input->get_post('goodsNo',TRUE));
 		$data['beginDate']  = $beginDate = str_enhtml($this->input->get_post('beginDate',TRUE));
 		$data['endDate']    = $endDate = str_enhtml($this->input->get_post('endDate',TRUE));
-		$where = ' and a.billType="SALE"';
+		$where = '   and a.billType="SALE"';
 		$where .= $salesId ? ' and e.number  in('.str_quote($salesId).')' : ''; 
 		$where .= $storageNo ? ' and d.locationNo in('.str_quote($storageNo).')' : ''; 
 		$where .= $customerNo ? ' and c.number in('.str_quote($customerNo).')' : ''; 
@@ -497,7 +497,7 @@ class Report extends CI_Controller {
 		$goodsNo    = str_enhtml($this->input->get_post('goodsNo',TRUE));
 		$beginDate  = str_enhtml($this->input->get_post('beginDate',TRUE));
 		$endDate    = str_enhtml($this->input->get_post('endDate',TRUE));
-		$where = ' and a.billType="SALE"';
+		$where = '   and a.billType="SALE"';
 		$where .= $salesId ? ' and e.number  in('.str_quote($salesId).')' : ''; 
 		$where .= $storageNo ? ' and d.locationNo in('.str_quote($storageNo).')' : ''; 
 		$where .= $customerNo ? ' and c.number in('.str_quote($customerNo).')' : ''; 
@@ -1371,9 +1371,9 @@ class Report extends CI_Controller {
         foreach($list as $k => $v){
             $amount += $v['rpAmount'];
             $list[$k]['hxStateTxt'] = $hxStateTxt[$v['hxStateCode']];
-            $list[$k]['color'] = 'red';
+            $list[$k]['color'] = '#ffe5e5';
             if($v['hxStateCode'] == 2){
-                $list[$k]['color'] = 'green';
+                $list[$k]['color'] = '#B1FBB1';
             }
         }
         $total['rpAmount'] = $amount;
@@ -1450,9 +1450,9 @@ class Report extends CI_Controller {
         foreach($list as $k => $v){
             $amount += $v['rpAmount'];
             $list[$k]['hxStateTxt'] = $hxStateTxt[$v['hxStateCode']];
-            $list[$k]['color'] = 'red';
+            $list[$k]['color'] = '#ffe5e5';
             if($v['hxStateCode'] == 2){
-                $list[$k]['color'] = 'green';
+                $list[$k]['color'] = '#B1FBB1';
             }
         }
         $total['rpAmount'] = $amount;

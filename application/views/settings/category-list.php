@@ -58,7 +58,7 @@ $(document).keydown(function(event) {
             </span>
             <ul class="searchbox cf">
 		        <li>
-		          <input type="text" id="matchCon" class="ui-input ui-input-ph matchCon" value="輸入分類名">
+		          <input type="text" id="matchCon" class="ui-input ui-input-ph matchCon" placeholder="輸入分類名">
 
 		        </li>
 		        <li><a class="ui-btn mrb" id="search">檢索</a></li>

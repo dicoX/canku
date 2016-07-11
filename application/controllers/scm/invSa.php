@@ -53,12 +53,20 @@ class InvSa extends CI_Controller
         $matchCon = str_enhtml($this->input->get_post('matchCon', TRUE));
         $beginDate = str_enhtml($this->input->get_post('beginDate', TRUE));
         $endDate = str_enhtml($this->input->get_post('endDate', TRUE));
+		$contactName = str_enhtml($this->input->get_post('contactName', TRUE));
         $order = $sidx ? $sidx . ' ' . $sord : ' a.id desc';
         $where = ' and a.billType="SALE"';
         $where .= $transType > 0 ? ' and a.transType=' . $transType : '';
         $where .= $salesId > 0 ? ' and a.salesId=' . $salesId : '';
         $where .= $hxState > 0 ? ' and a.hxStateCode=' . $hxState : '';
-        $where .= $matchCon ? ' and (b.name like "%' . $matchCon . '%" or description like "%' . $matchCon . '%" or billNo like "%' . $matchCon . '%")' : '';
+		if($contactName){
+			$where .= $matchCon ? ' and (description like "%' . $matchCon . '%" or billNo like "%' . $matchCon . '%")' : '';
+			$where .= ' and b.name="' . $contactName . '"';
+		}else{
+			$where .= $matchCon ? ' and (b.name like "%' . $matchCon . '%" or description like "%' . $matchCon . '%" or billNo like "%' . $matchCon . '%")' : '';
+		}
+        
+		
         $where .= $beginDate ? ' and a.billDate>="' . $beginDate . '"' : '';
         $where .= $endDate ? ' and a.billDate<="' . $endDate . '"' : '';
         $offset = $rows * ($page - 1);

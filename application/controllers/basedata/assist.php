@@ -8,6 +8,15 @@ class Assist extends CI_Controller {
     }
 	
 	public function index(){
+		$action = $this->input->get('action', TRUE);
+        switch ($action) {
+            case 'add':
+                $this->add();
+                break;
+            default:
+			break;
+        }
+		
 		$v = array();
 	    $data['status'] = 200;
 		$data['msg']    = 'success'; 
@@ -52,6 +61,7 @@ class Assist extends CI_Controller {
 	
 	//新增
 	public function add(){
+		// str_alert(-1,'参数错误');
 		$data = str_enhtml($this->input->post(NULL,TRUE));
 		$data = $this->validform($data);
         switch ($data['typeNumber']) {
@@ -82,7 +92,7 @@ class Assist extends CI_Controller {
 			default: 
 				str_alert(-1,'参数错误');
 		}	
-		$sql  = $this->mysql_model->insert(CATEGORY,elements(array('name','typeNumber'),$data));
+		$sql  = $this->mysql_model->insert(CATEGORY, elements(array('name','typeNumber'),$data));
 		if ($sql) {
 			$this->common_model->logs($success.$data['name']);
 			die('{"status":200,"msg":"success","data":{"coId":0,"detail":true,"id":'.$sql.',"level":1,"name":"'.$data['name'].'","parentId":0,"remark":"","sortIndex":2,"status":0,"typeNumber":"'.$data['typeNumber'].'","uuid":""}}');

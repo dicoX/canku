@@ -97,7 +97,7 @@ function callback() {
     }
     return e
 }
-
+console.log(parent.THISPAGE.$_customer);
 var queryConditions = {
         skey: (frameElement.api.data ? frameElement.api.data.skey : "") || "",
         contactId: parent.THISPAGE.$_customer.data("contactInfo").id

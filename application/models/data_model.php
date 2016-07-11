@@ -231,8 +231,10 @@ class Data_model extends CI_Model{
 					on a.salesId=e.id 	
 					left join 
 						'.UNIT.' as u on a.unitId = u.id
+					left  join
+						'.INVOICE.' as k on a.iid = k.id
 				where 
-					(a.isDelete=0) 
+					(a.isDelete=0 and  k.id<>0) 
 				'.$where;
 		return $this->mysql_model->query(INVOICE_INFO,$sql,$type); 	
 	}

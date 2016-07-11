@@ -175,7 +175,7 @@ var queryConditions = {
 					})
 				}
 			}), $("#search").click(function() {
-				queryConditions.matchCon = "请输入单据号或客户或备注" === a.$_matchCon.val() ? "" : a.$_matchCon.val(), queryConditions.beginDate = a.$_beginDate.val(), queryConditions.endDate = a.$_endDate.val(), THISPAGE.reloadData(queryConditions)
+				queryConditions.matchCon = a.$_matchCon.val(), queryConditions.beginDate = a.$_beginDate.val(), queryConditions.endDate = a.$_endDate.val(), THISPAGE.reloadData(queryConditions)
 			}), $("#refresh").click(function() {
 				THISPAGE.reloadData(queryConditions)
 			}), $("#add").click(function(a) {

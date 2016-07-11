@@ -260,10 +260,12 @@ class Inventory extends CI_Controller
             );
             $info = elements($info, $data, '');
             $invId = $this->mysql_model->insert(GOODS, $info);
+			$unitId = $data['baseUnitId'];
             if (strlen($data['propertys']) > 0) {
                 $list = (array)json_decode($data['propertys'], true);
                 foreach ($list as $arr => $row) {
                     $v[$arr]['invId'] = $invId;
+					$v[$arr]['unitId'] = $unitId;
                     $v[$arr]['locationId'] = isset($row['locationId']) ? $row['locationId'] : 0;
                     $v[$arr]['qty'] = isset($row['quantity']) ? $row['quantity'] : 0;
                     $v[$arr]['price'] = isset($row['unitCost']) ? $row['unitCost'] : 0;

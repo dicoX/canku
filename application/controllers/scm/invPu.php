@@ -204,6 +204,7 @@ class InvPu extends CI_Controller {
 	    $this->common_model->checkpurview(3);
 	    $id   = intval($this->input->get_post('id',TRUE));
 		$data =  $this->data_model->get_invoice('and (a.id='.$id.') and billType="PUR"',1);
+		// str_alert(200, "OK", $data);
 		if (count($data)>0) {
 			$s = $v = array();
 			$info['status'] = 200;
