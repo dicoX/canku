@@ -114,6 +114,8 @@ class Report extends CI_Controller {
 		$where .= $storageNo ? ' and d.locationNo in('.str_quote($storageNo).')' : ''; 
 		$where .= $customerNo ? ' and c.number in('.str_quote($customerNo).')' : ''; 
 		$where .= $goodsNo ? ' and b.number in('.str_quote($goodsNo).')' : ''; 
+		$where .= $beginDate ? ' and a.billDate>="'.$beginDate.'"' : ''; 
+		$where .= $endDate ? ' and a.billDate<="'.$endDate.'"' : ''; 
 		$list   = $this->data_model->get_invoice_info($where.' order by a.billDate,a.id'); 
 		foreach ($list as $arr=>$row) {
 			$v[$arr]['billId']        = intval($row['iid']);
@@ -176,6 +178,9 @@ class Report extends CI_Controller {
 		$where .= $storageNo ? ' and d.locationNo in('.str_quote($storageNo).')' : ''; 
 		$where .= $customerNo ? ' and c.number in('.str_quote($customerNo).')' : ''; 
 		$where .= $goodsNo ? ' and b.number in('.str_quote($goodsNo).')' : ''; 
+		$where .= $beginDate ? ' and a.billDate>="'.$beginDate.'"' : ''; 
+		$where .= $endDate ? ' and a.billDate<="'.$endDate.'"' : ''; 
+		
 		$data['list'] = $this->data_model->get_invoice_info($where.' order by a.id'); 
 		$this->load->view('report/puDetail-detailExporter',$data);	
 	}

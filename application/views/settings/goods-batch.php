@@ -23,7 +23,7 @@ try{
 	    <div class="fl">
 	      <ul class="ul-inline">
 	        <li>
-	          <input type="text" id="matchCon" class="ui-input ui-input-ph" value="請輸入商品編號/名稱/型號">
+	          <input type="text" id="matchCon" class="ui-input ui-input-ph" placeholder="請輸入商品編號/名稱/型號">
 	        </li>
 	        <li><a class="ui-btn mrb" id="search">檢索</a><!-- <a class="ui-btn" id="refresh">刷新</a> --></li>
 	      </ul>

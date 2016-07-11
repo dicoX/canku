@@ -77,7 +77,7 @@ $(document).keydown(function(event) {
                   计算毛利</label>
               </li>-->
             </ul>
-            <div class="btns"> <a href="#" id="conditions-trigger" class="conditions-trigger" tabindex="-1">更多條件<b></b></a> <a class="ui-btn ui-btn-sp" d="filter-submit" href="#">確定</a> <a class="ui-btn" id="filter-reset" href="#" tabindex="-1">重置</a> </div>
+            <div class="btns"> <a href="#" id="conditions-trigger" class="conditions-trigger" tabindex="-1">更多條件<b></b></a> <a class="ui-btn ui-btn-sp" id="filter-submit" href="#">確定</a> <a class="ui-btn" id="filter-reset" href="#" tabindex="-1">重置</a> </div>
           </div>
         </div>
         <a id="refresh" class="ui-btn ui-btn-refresh fl mrb"><b></b></a> <span class="txt fl" id="cur-search-tip"></span> </div>

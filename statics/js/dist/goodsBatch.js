@@ -97,10 +97,10 @@ function callback() {
     }
     return e
 }
-console.log(parent.THISPAGE.$_customer);
+
 var queryConditions = {
         skey: (frameElement.api.data ? frameElement.api.data.skey : "") || "",
-        contactId: parent.THISPAGE.$_customer.data("contactInfo").id
+        contactId: parent.THISPAGE ? parent.THISPAGE.$_customer.data("contactInfo").id : ""
     },
     $grid = $("#grid"),
     addList = {},
@@ -118,7 +118,7 @@ var api = frameElement.api,
             this.initDom(), this.loadGrid(), this.initZtree(), this.addEvent()
         },
         initDom: function () {
-            this.$_matchCon = $("#matchCon").val(queryConditions.skey || "請輸入商品編號/名稱/型號"), this.$_matchCon.placeholder()
+            this.$_matchCon = $("#matchCon").val(queryConditions.skey || ""), this.$_matchCon.placeholder()
         },
         initZtree: function () {
             zTree = Public.zTree.init($(".grid-wrap"), {
@@ -352,7 +352,7 @@ var api = frameElement.api,
                     lock: !0
                 })
             }), $("#search").click(function () {
-                queryConditions.catId = a.catId, queryConditions.skey = "請輸入商品編號/名稱/型號" === a.$_matchCon.val() ? "" : a.$_matchCon.val(), a.reloadData(queryConditions)
+                queryConditions.catId = a.catId, queryConditions.skey = a.$_matchCon.val(), a.reloadData(queryConditions)
             }), $("#refresh").click(function () {
                 a.reloadData(queryConditions)
             })
