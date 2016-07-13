@@ -459,7 +459,34 @@ class Inventory extends CI_Controller
         die(json_encode($data));
     }
 	
-	
+	public function get_last_invoice_info(){
+        $contactId = $this->input->get_post('contact_id', TRUE);
+        
+        $where = ' 1 ';
+        if($contactId) $where .= " and buId = '{$contactId}' ";
+		
+		$sql = "SELECT * FROM ".INVOICE." WHERE {$where} order by billDate desc, modifyTime desc limit 1";
+        $list = $this->mysql_model->query(INVOICE, $sql, 2);
+        $row = $list[0];
+        $list = array();
+        if($row){
+            $where = "a.billNo = '{$row['billNo']}'";
+            
+            $sql = "SELECT a.*, ABS(a.unitId) as unitId, b.name as mainUnit, c.name as locationName, d.name as goodsName, d.spec
+                        FROM ".INVOICE_INFO." a
+                        LEFT JOIN ".UNIT." b on b.id = ABS(a.unitId)
+                        LEFT JOIN ".STORAGE." c on c.id = a.locationId
+                        LEFT JOIN ".GOODS." d on d.id = a.invId
+                        WHERE {$where}";
+            $list = $this->mysql_model->query(INVOICE_INFO, $sql, 2);
+        }
+		$data['status'] = 200;
+        $data['msg'] = 'success';
+		$data['data'] = $list;
+		echo json_encode($data);
+		return;        
+    }
+    
 	public function get_goods_prices(){
 		$goodsIds = $this->input->get_post('goodsIds', TRUE);
 		$contactId = $this->input->get_post('contact_id', TRUE);

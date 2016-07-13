@@ -2243,7 +2243,13 @@ Business.billsEvent = function(obj, type, flag){
 				ok: function(){
 					if(typeof this.content.callback === 'function'){
 						this.content.callback();
+                        this.close();
+                        
 						var _this = $('.sale-grid');
+                        var e = THISPAGE.$_customer;
+                        var c = e.data("contactInfo");
+                        var contactId = c.id;
+     
 						if(_this.length > 0){
 							var goodIds = [];
 							_this.find('td[aria-describedby="grid_gid"]').each(function(i){
@@ -2255,15 +2261,12 @@ Business.billsEvent = function(obj, type, flag){
 							})
 							if(goodIds.length > 0){
 								var goodIdsStr = goodIds.join(",");
-								var e = THISPAGE.$_customer;
-								var c = e.data("contactInfo");
-								var contactId = c.id;
 								var url = '../basedata/inventory/get_goods_prices';
 								$.get(url, {'goodsIds':goodIdsStr, 'contact_id':contactId}, function(e){
 									if(e.status == 200){
 										$.each(e.data, function(i, n){
 											var tr = _this.find('.gid-' + n.goods_id).parents('tr');
-											console.log(tr.find('td[aria-describedby="grid_price"]').html());
+											//console.log(tr.find('td[aria-describedby="grid_price"]').html());
 											tr.find('td[aria-describedby="grid_price"]').text(n.price);
 										})
 										var sum = 0;
@@ -2282,11 +2285,38 @@ Business.billsEvent = function(obj, type, flag){
 										_this.parents('.ui-jqgrid-bdiv').next('.ui-jqgrid-sdiv').find('.footrow').find('td[aria-describedby="grid_amount"]').text(sum);
 									}
 								}, 'json');
-							}
-							
-							//console.log(_this.find('td[aria-describedby="grid_price"]').html());
+							}else{ //获取上一次记录
+                                var url = '../basedata/inventory/get_last_invoice_info';
+                                $.get(url, {'contact_id':contactId}, function(e){
+                                    if(e.status == 200){
+                                        var sum = 0;
+                                        var num = 0;
+										$.each(e.data, function(i, n){
+                                            i += 1;
+											var tr = _this.find('tr').eq(i);
+                                            
+                                            n.qty = Math.abs(n.qty);
+                                            
+                                            var goods = n.goodsName + ' ' + n.spec;
+                                            tr.find('td[aria-describedby="grid_gid"]').addClass('gid-' + n.invId).text(n.invId);
+                                            tr.find('td[aria-describedby="grid_goods"]').text(goods);
+                                            tr.find('td[aria-describedby="grid_discountRate"]').text(n.discountRate);
+                                            tr.find('td[aria-describedby="grid_deduction"]').text(n.deduction);
+                                            tr.find('td[aria-describedby="grid_mainUnit"]').text(n.mainUnit);
+                                            tr.find('td[aria-describedby="grid_locationName"]').text(n.locationName);
+                                            tr.find('td[aria-describedby="grid_qty"]').text(n.qty);
+											tr.find('td[aria-describedby="grid_price"]').text(n.price);
+                                            var amount = n.qty * n.price;
+                                            tr.find('td[aria-describedby="grid_amount"]').text(amount);
+                                            sum += amount;
+                                            num += n.qty;
+										})
+										_this.parents('.ui-jqgrid-bdiv').next('.ui-jqgrid-sdiv').find('.footrow').find('td[aria-describedby="grid_amount"]').text(sum);
+                                        _this.parents('.ui-jqgrid-bdiv').next('.ui-jqgrid-sdiv').find('.footrow').find('td[aria-describedby="grid_qty"]').text(num);
+									}
+                                }, 'json')
+                            }
 						}
-						this.close();
 					}
 			        return false;
 				},

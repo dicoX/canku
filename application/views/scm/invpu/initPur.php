@@ -56,7 +56,7 @@ $(document).keydown(function(event) {
       </dl>
     </div>
     <div class="grid-wrap">
-      <table id="grid">
+      <table id="grid" class="sale-grid">
       </table>
       <div id="page"></div>
     </div>
