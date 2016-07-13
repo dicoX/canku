@@ -100,7 +100,7 @@ function callback() {
 
 var queryConditions = {
         skey: (frameElement.api.data ? frameElement.api.data.skey : "") || "",
-        contactId: parent.THISPAGE ? parent.THISPAGE.$_customer.data("contactInfo").id : ""
+        contactId: parent.THISPAGE && parent.THISPAGE.$_customer.data("contactInfo") ? parent.THISPAGE.$_customer.data("contactInfo").id : ""
     },
     $grid = $("#grid"),
     addList = {},

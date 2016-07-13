@@ -10,14 +10,16 @@ class Data_model extends CI_Model{
 	public function get_inventory($where='',$type=2) {
 	    $sql = 'select sum(a.qty) as qty, 
 					a.invId, 
+					a.unitId as to_unitId, 
 					a.isDelete, 
-          a.locationId,  
-          b.name as invName,  
+					a.locationId,  
+					b.name as invName,  
 					b.number as invNumber,
 					b.spec as invSpec, 
 					b.categoryId ,
 					b.categoryName,
 					b.unitName,
+					b.baseUnitId as baseUnitId,
 					b.unitid,
 					b.lowQty,
 					b.highQty,
@@ -25,7 +27,7 @@ class Data_model extends CI_Model{
 		        from '.INVOICE_INFO.' as a 
 					left join 
 						(select 
-							id,name,number,spec,unitName ,unitid ,lowQty,highQty,categoryId,categoryName
+							id,name,number,spec,unitName ,unitid , baseUnitId, lowQty,highQty,categoryId,categoryName
 						from '.GOODS.' 
 						where (isDelete=0) 
 						order by id desc) as b 
@@ -45,16 +47,35 @@ class Data_model extends CI_Model{
 	}	
 	
 	//获取库存 用于判断库存是否满足
+	//分 商品、仓库、单位
 	public function get_invoice_info_inventory() {
-	    $sql = 'select 
-		            invId,locationId,sum(qty) as qty
-		        from '.INVOICE_INFO.' 
-				group by invId, locationId
-				';
+	    $sql = 'SELECT a.invId, a.locationId, a.unitId, b.baseUnitId, sum(a.qty) as qty 
+			FROM '. INVOICE_INFO. ' as a 
+			left JOIN '. GOODS .' as b on a.invId = b.id 
+			group by a.invId, a.locationId, a.unitId';
 		$v = array();
 		$list = $this->mysql_model->query(INVOICE_INFO,$sql,2);
+		//str_alert(-1, '库存不足！', $list);
+		// 这里换算，得出总余
 		foreach($list as $arr=>$row){
-		    $v[$row['invId']][$row['locationId']] = $row['qty'];
+			if(!isset($row['baseUnitId']) || null == $row['baseUnitId'] ){
+				continue;
+			}
+			if(!isset($v[$row['invId']][$row['locationId']])){ //判断已有属性
+				$v[$row['invId']][$row['locationId']] = 0;
+			}
+			$qty = floatval($row['qty']);
+			$buId = $row['baseUnitId'];
+			
+			$uId = $row['unitId'];
+			$discount = $this->mysql_model->get_row(UNITPRICE, '(unitId=' . $buId . ') and to_unitId=' . $uId, 'discount');
+			$discount = floatval($discount);
+			if($discount != 0){  // 已经设置单位换算
+				$q = $qty * (1 / $discount);
+				$v[$row['invId']][$row['locationId']] += $q;
+			}else{ // 还没设置单位换算 直接相加
+				$v[$row['invId']][$row['locationId']] += $qty;
+			}
 		}		
 		return $v;		
 	}	
@@ -193,7 +214,13 @@ class Data_model extends CI_Model{
 	 
 	
 	//获取单据列表明细
-	public function get_invoice_info($where='',$type=2) {
+	public function get_invoice_info($where='', $type=2, $isReport=false) {
+		$w = "";
+		$w2 = "";
+		if($isReport){
+			$w = ' left join '.INVOICE.' as k on a.iid = k.id ';
+			$w2 = ' and k.id<>0 ';
+		}
 	    $sql = 'select 
 		            a.*, 
 					b.name as invName, b.number as invNumber, b.spec as invSpec, u.name as mainUnit, 
@@ -231,10 +258,9 @@ class Data_model extends CI_Model{
 					on a.salesId=e.id 	
 					left join 
 						'.UNIT.' as u on a.unitId = u.id
-					left  join
-						'.INVOICE.' as k on a.iid = k.id
+					'.$w.'
 				where 
-					(a.isDelete=0 and  k.id<>0) 
+					(a.isDelete=0 '. $w2 .' ) 
 				'.$where;
 		return $this->mysql_model->query(INVOICE_INFO,$sql,$type); 	
 	}

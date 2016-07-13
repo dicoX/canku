@@ -547,7 +547,7 @@ class InvSa extends CI_Controller
     public function justIntimeInv()
     {
         $v = array();
-        $qty = 0;
+        $total = 0;
         $data['status'] = 200;
         $data['msg'] = 'success';
         $page = max(intval($this->input->get_post('page', TRUE)), 1);
@@ -555,20 +555,47 @@ class InvSa extends CI_Controller
         $invid = intval($this->input->get_post('invId', TRUE));
         $where = $invid > 0 ? ' and a.invId=' . $invid . '' : '';
         $data['data']['total'] = 1;
-        $data['data']['records'] = $this->data_model->get_inventory($where . ' GROUP BY locationId', 3);
-        $list = $this->data_model->get_inventory($where . ' GROUP BY locationId');
+        $list = $this->data_model->get_inventory($where . ' GROUP BY locationId, to_unitId');
+		$v1 = array();
+		$v2 = array();
         foreach ($list as $arr => $row) {
-            $i = $arr + 1;
-            $v[$arr]['locationId'] = intval($row['locationId']);
-            $qty += $v[$arr]['qty'] = (float)$row['qty'];
-            $v[$arr]['locationName'] = $row['locationName'];
-            $v[$arr]['invId'] = $row['invId'];
+			$q = 0;
+			if(!isset($v1[$row['locationId']])){ //判断已有属性
+				$v1[$row['locationId']] = $row;
+			}else{
+				$q = floatval($v1[$row['locationId']]['qty']);
+			}
+			
+			$qty = floatval($row['qty']);
+			$buId = $row['baseUnitId'];
+			$uId = $row['to_unitId'];
+			$discount = $this->mysql_model->get_row(UNITPRICE, '(unitId=' . $buId . ') and to_unitId=' . $uId, 'discount');
+			$discount = floatval($discount);
+			if($discount != 0){  // 已经设置单位换算
+				$dis = $qty * (1 / $discount);
+				$q += $dis;
+			}else{ // 还没设置单位换算 直接相加
+				$q += $qty;
+			}
+			$v1[$row['locationId']]['qty'] = $q;
         }
-        $v[$i]['locationId'] = 0;
-        $v[$i]['qty'] = $qty;
-        $v[$i]['locationName'] = '合计';
-        $v[$i]['invId'] = 0;
-        $data['data']['rows'] = $v;
+		//die(json_encode($v1));
+		foreach($v1 as $arr=>$row){
+			array_push($v2, $row);
+			$i = $arr;
+			//$v[$arr]['locationId'] = intval($row['locationId']);
+            $total += (float)$row['qty'];
+            //$v[$arr]['locationName'] = $row['locationName'];
+            //$v[$arr]['invId'] = $row['invId'];
+		}
+		
+        $v2[$i]['locationId'] = 0;
+        $v2[$i]['qty'] = $total;
+        $v2[$i]['locationName'] = '合计';
+        $v2[$i]['invId'] = 0;
+		
+		$data['data']['records'] = count($list);
+        $data['data']['rows'] = $v2;
         die(json_encode($data));
     }
 
@@ -735,8 +762,27 @@ class InvSa extends CI_Controller
                 if ($system['requiredCheckStore'] == 1) {
                     if (intval($data['transType']) == 150601) {                        //销售才验证
                         if (isset($inventory[$row['invId']][$row['locationId']])) {
-							//str_alert(-1, "23" , $inventory);
-                            $inventory[$row['invId']][$row['locationId']] < (float)$row['qty'] && str_alert(-1, $row['locationName'] . $row['invName'] . '商品库存不足！', $row['invId']);
+							// str_alert(-1, "23" , $inventory);
+							$inv = $inventory[$row['invId']][$row['locationId']];
+							if((int)$row['unitId'] == (int)$row['old_unitId']){ // 判断单位是否一样
+								// str_alert(-1, $row['invName'] . '库存不足！', $inventory);
+								$inv < (float)$row['qty'] && str_alert(-1, $row['locationName'] . $row['invName'] . '商品库存不足！', $row['invId']);
+							}else{
+								//TODO: 分析库存
+								$buId = $row['old_unitId'];
+								$uId = $row['unitId'];
+								$qty = (float)$row['qty'];
+								$discount = $this->mysql_model->get_row(UNITPRICE, '(unitId=' . $buId . ') and to_unitId=' . $uId, 'discount');
+								$discount = floatval($discount);
+								// str_alert(-1, "23" , $discount);
+								if($discount != 0){  // 已经设置单位换算
+									$q = $qty * (1 / $discount);
+									$inv < $q && str_alert(-1, $row['locationName'] . $row['invName'] . '商品库存不足！', $row['invId']);
+								}else{ // 还没设置单位换算 直接相加
+									$inv < $qty && str_alert(-1, $row['locationName'] . $row['invName'] . '商品库存不足！', $row['invId']);
+								}
+							}
+                            
                         } else {
                             str_alert(-1, $row['invName'] . '库存不足！');
                         }
@@ -826,9 +872,10 @@ class InvSa extends CI_Controller
         $goods_id = intval($this->input->get_post('good_id', TRUE));
         $contact_id = intval($this->input->get_post('contact_id', TRUE));
         $price = $this->mysql_model->get_row(CUSTOMERPRICE, '(goods_id=' . $goods_id . ') and contact_id=' . $contact_id, 'price');
-        $goods = $this->mysql_model->get_row(GOODS, '(id=' . $goods_id . ')', 'baseUnitId');
-        $price = floatval($price);
-        $unit_id = intval($goods);
+        $goods = $this->mysql_model->get_results(GOODS, '(id=' . $goods_id . ')', 'salePrice,baseUnitId')[0];
+        //die(json_encode($goods));
+		$price = 0 != floatval($price) ? floatval($price) : floatval($goods["salePrice"]);
+        $unit_id = intval($goods["baseUnitId"]);
         $unit = $this->mysql_model->get_row(UNITPRICE, '(unitId=' . $unit_id . ') and to_unitId=' . $to_unit_id, 'discount');
         if (isset($unit) && !empty($unit)) {
             $price = floatval($price / $unit);

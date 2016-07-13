@@ -5,19 +5,27 @@ var curRow, curCol, loading, SYSTEM = system = parent.SYSTEM,
     taxRequiredInput = system.taxRequiredInput,
     hiddenAmount = !1,
     hideCustomerCombo = !1,
+	unitPriceList = {},
     urlParam = Public.urlParam(),
     disEditable = urlParam.disEditable,
     defaultPage = Public.getDefaultPage(),
-    qtyPlaces = Number(parent.SYSTEM.qtyPlaces),
-    pricePlaces = Number(parent.SYSTEM.pricePlaces),
-    amountPlaces = Number(parent.SYSTEM.amountPlaces),
-    THISPAGE = {
+    qtyPlaces = Number(parent.SYSTEM.qtyPlaces),	// 质量小数点
+    pricePlaces = Number(parent.SYSTEM.pricePlaces),  // 价格小数点
+    amountPlaces = Number(parent.SYSTEM.amountPlaces); // 价格小数点
+	
+var THISPAGE = {
         init: function (a) {
             this.mod_PageConfig = Public.mod_PageConfig.init("150602" == urlParam.transType ? "salesBack" : "sales"), SYSTEM.isAdmin !== !1 || SYSTEM.rights.AMOUNT_OUTAMOUNT || (hiddenAmount = !0, $("#amountArea").hide()), this.initDom(a), this.loadGrid(a), this.initCombo(), a.id > 0 && a.checked ? this.disableEdit() : (this.editable = !0, $("#grid").jqGrid("setGridParam", {
                 cellEdit: !0
             })), this.addEvent(), setTimeout(function () {
                 $("#grid").jqGrid("nextCell", 1, 1)
-            }, 10), $.cookie("BarCodeInsert") && THISPAGE.$_barCodeInsert.addClass("active"), this.goodsEdittypeInit()
+            }, 10), $.cookie("BarCodeInsert") && THISPAGE.$_barCodeInsert.addClass("active"), this.goodsEdittypeInit();
+			$.post("../basedata/unit/unitRateAll", function(data){
+				if(200 == data.status){
+					unitPriceList = data.data;
+					console.log(unitPriceList);
+				}
+			})
         },
         initDom: function (a) {
             var b = this;
@@ -1059,7 +1067,7 @@ var curRow, curCol, loading, SYSTEM = system = parent.SYSTEM,
                             parentTr.data('unitInfo', {unitId: data.id, name: data.name});
                             var good_info =$("#grid").jqGrid("getRowData", THISPAGE.curID);
                             var storage = parentTr.data('goodsInfo');
-                            console.log(storage);
+                            // console.log(data, storage);
                             var unit_id = good_info.unitId;
                             var to_unit_id = data.id;
                             var price;
@@ -1069,7 +1077,7 @@ var curRow, curCol, loading, SYSTEM = system = parent.SYSTEM,
                                     unit_id: unit_id,
                                     to_unit_id: to_unit_id,
                                     good_id: good_info.gid,
-                                    contact_id:contact.id
+                                    contact_id: contact ? contact.id : ""
                                 }, function (data) {
                                     if (data.status == 200) {
                                         price = data.price;
@@ -1505,6 +1513,7 @@ var curRow, curCol, loading, SYSTEM = system = parent.SYSTEM,
                             skuId: i.skuId || -1,
                             skuName: i.skuName || "",
                             unitId: k.unitId || -1,
+							old_unitId : i.unitId || -1,
                             mainUnit: k.name || "",
                             qty: h.qty,
                             price: h.price,

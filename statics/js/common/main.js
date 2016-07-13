@@ -1881,6 +1881,7 @@ define(["jquery", "plugins", "grid", "dialog", "datepicker"], function(require, 
 			}, opts);
 			return Business.storageCombo($_obj, opts);
 		}
+		// 仓库
 		Business.storageCombo = function($_obj, opts){
 			var defaultPage = Public.getDefaultPage();
 			if ($_obj.length == 0) { return };
@@ -1921,6 +1922,7 @@ define(["jquery", "plugins", "grid", "dialog", "datepicker"], function(require, 
 			var storageCombo = $_obj.combo(opts).getCombo();
 			return storageCombo;
 		};
+		// 单位
 		Business.unitCombo = function($_obj, opts){
 			if ($_obj.length == 0) { return };
 			var defaultPage = Public.getDefaultPage();
@@ -1936,7 +1938,7 @@ define(["jquery", "plugins", "grid", "dialog", "datepicker"], function(require, 
 					},*/
 					text: 'name',
 					value: 'id',
-					defaultSelected: 0,
+					defaultSelected: -1,
 					cache: false,
 					editable: false,
 					trigger: false,

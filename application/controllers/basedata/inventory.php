@@ -259,6 +259,7 @@ class Inventory extends CI_Controller
                 'remark', 'salePrice', 'spec', 'vipPrice', 'wholesalePrice'
             );
             $info = elements($info, $data, '');
+			$info['unitId'] = $info['baseUnitId'];
             $invId = $this->mysql_model->insert(GOODS, $info);
 			$unitId = $data['baseUnitId'];
             if (strlen($data['propertys']) > 0) {
@@ -330,6 +331,7 @@ class Inventory extends CI_Controller
                     $v[$arr]['price'] = isset($row['unitCost']) ? $row['unitCost'] : 0;
                     $v[$arr]['amount'] = isset($row['amount']) ? $row['amount'] : 0;
                     $v[$arr]['skuId'] = isset($row['skuId']) ? $row['skuId'] : 0;
+					$v[$arr]['unitId'] = $info['baseUnitId'];
                     $v[$arr]['billDate'] = '2001-01-1';
                     $v[$arr]['billNo'] = '期初数量';
                     $v[$arr]['billType'] = 'INI';
@@ -440,9 +442,41 @@ class Inventory extends CI_Controller
         $rows = max(intval($this->input->get_post('rows', TRUE)), 100);
         $where = '';
         $data['data']['total'] = 1;
-        $data['data']['records'] = $this->data_model->get_inventory($where . ' GROUP BY invId HAVING qty>highQty or qty<lowQty', 3);
-        $list = $this->data_model->get_inventory($where . ' GROUP BY invId HAVING qty>highQty or qty<lowQty');
-        foreach ($list as $arr => $row) {
+		$vs1 = array();
+		$vs2 = array();
+		$ins = $this->data_model->get_inventory($where . ' GROUP BY invId, to_unitId HAVING qty>highQty or qty<lowQty', 2);
+		
+		foreach($ins as $arr => $row){
+			if(!isset($row['baseUnitId']) || null == $row['baseUnitId'] ){
+				continue;
+			}
+			$q = 0;
+			if(!isset($vs1[$row['invId']])){ //判断已有属性
+				$vs1[$row['invId']] = $row;
+			}else{
+				$q = floatval($vs1[$row['invId']]['qty']);
+			}
+			$qty = floatval($row['qty']);
+			$buId = $row['baseUnitId'];
+			$uId = $row['to_unitId'];
+			$discount = $this->mysql_model->get_row(UNITPRICE, '(unitId=' . $buId . ') and to_unitId=' . $uId, 'discount');
+			$discount = floatval($discount);
+			if($discount != 0){  // 已经设置单位换算
+				$dis = $qty * (1 / $discount);
+				$q += $dis;
+			}else{ // 还没设置单位换算 直接相加
+				$q += $qty;
+			}
+			$vs1[$row['invId']]['qty'] = $q;
+		}
+		foreach($vs1 as $key=>$row){
+			array_push($vs2, $row);
+		}
+		
+        $data['data']['records'] = count($vs2);
+		
+        // $list = $this->data_model->get_inventory($where . ' GROUP BY invId, to_unitId HAVING qty>highQty or qty<lowQty');
+        foreach ($vs2 as $arr => $row) {
             $qty1 = (float)$row['qty'] - (float)$row['highQty'];
             $qty2 = (float)$row['qty'] - (float)$row['lowQty'];
             $v[$arr]['highQty'] = (float)$row['highQty'];
