@@ -458,7 +458,32 @@ class Inventory extends CI_Controller
         $data['data']['rows'] = $v;
         die(json_encode($data));
     }
-
+	
+	
+	public function get_goods_prices(){
+		$goodsIds = $this->input->get_post('goodsIds', TRUE);
+		$contactId = $this->input->get_post('contact_id', TRUE);
+		
+        $where = ' 1 ';
+        if($goodsIds) $where .= ' and a.goods_id in('.str_quote($goodsIds).') ';
+        if($contactId) $where .= " and a.contact_id = '{$contactId}' ";
+		
+		$sql = "SELECT a.*, b.salePrice FROM ".CUSTOMERPRICE." a 
+					LEFT JOIN ".GOODS." b on b.id = a.goods_id
+					WHERE {$where}";
+		$list = $this->mysql_model->query(CUSTOMERPRICE, $sql, 2);
+		foreach($list as $k => $v){
+			$list[$k]['price'] = ($list[$k]['price'] > 0) ? $list[$k]['price'] : $list[$k]['salePrice'];
+			$list[$k]['price'] = sprintf("%.2f", $list[$k]['price']);
+		}
+		$data['status'] = 200;
+        $data['msg'] = 'success';
+		$data['data'] = $list;
+		echo json_encode($data);
+		return;
+	}
+	
+	
     //通过ID 获取商品信息
     private function get_goods_info($id)
     {

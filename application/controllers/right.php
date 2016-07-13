@@ -69,7 +69,8 @@ class Right extends CI_Controller {
 				 'username' => $data['userNumber'],
 				 'userpwd'  => md5($data['password']),
 				 'name'     => $data['userName'],
-				 'mobile'   => $data['userMobile']
+				 'mobile'   => $data['userMobile'],
+				 'lever'	=> '6,7'
 			);
 		    $sql = $this->mysql_model->insert(ADMIN,$info);
 			if ($sql) {
@@ -77,7 +78,7 @@ class Right extends CI_Controller {
 				die('{"status":200,"msg":"注册成功","userNumber":"'.$data['userNumber'].'"}');
 			}
 			str_alert(-1,'添加失败'); 
-		}	
+		}
 		str_alert(-1,'添加失败'); 
 	}
 	

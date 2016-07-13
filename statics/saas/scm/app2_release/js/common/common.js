@@ -2243,6 +2243,49 @@ Business.billsEvent = function(obj, type, flag){
 				ok: function(){
 					if(typeof this.content.callback === 'function'){
 						this.content.callback();
+						var _this = $('.sale-grid');
+						if(_this.length > 0){
+							var goodIds = [];
+							_this.find('td[aria-describedby="grid_gid"]').each(function(i){
+								var gid = $(this).text();
+								if(gid > 0){
+									$(this).addClass('gid-' + gid);
+									goodIds.push(gid);
+								}
+							})
+							if(goodIds.length > 0){
+								var goodIdsStr = goodIds.join(",");
+								var e = THISPAGE.$_customer;
+								var c = e.data("contactInfo");
+								var contactId = c.id;
+								var url = '../basedata/inventory/get_goods_prices';
+								$.get(url, {'goodsIds':goodIdsStr, 'contact_id':contactId}, function(e){
+									if(e.status == 200){
+										$.each(e.data, function(i, n){
+											var tr = _this.find('.gid-' + n.goods_id).parents('tr');
+											console.log(tr.find('td[aria-describedby="grid_price"]').html());
+											tr.find('td[aria-describedby="grid_price"]').text(n.price);
+										})
+										var sum = 0;
+										_this.find('td[aria-describedby="grid_gid"]').each(function(i){
+											var gid = $(this).text();
+											
+											if(gid > 0){
+												var tr = $(this).parents('tr');
+												var num = tr.find('td[aria-describedby="grid_qty"]').text();
+												var price = tr.find('td[aria-describedby="grid_price"]').text();
+												var amount = num * price;
+												tr.find('td[aria-describedby="grid_amount"]').text(amount);
+												sum += amount;
+											}
+										})
+										_this.parents('.ui-jqgrid-bdiv').next('.ui-jqgrid-sdiv').find('.footrow').find('td[aria-describedby="grid_amount"]').text(sum);
+									}
+								}, 'json');
+							}
+							
+							//console.log(_this.find('td[aria-describedby="grid_price"]').html());
+						}
 						this.close();
 					}
 			        return false;

@@ -1386,7 +1386,6 @@ class Report extends CI_Controller {
             'list' => $list,
             'total' => $total
         );
-        
         //print_r($list);
         echo json_encode(array( 'data'=> $data));
         return;
