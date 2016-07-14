@@ -38,13 +38,17 @@ class Unit extends CI_Controller
         $this->common_model->checkpurview(78);
         $data = str_enhtml($this->input->post(NULL, TRUE));
         $rate = element('rate', $data);
+		//str_alert(-1, '2333', $rate);
         $this->db->trans_begin();
         if (count($data) > 0) {
             $data = $this->validform($data);
             $sql = $this->mysql_model->insert(UNIT, elements(array('name', 'default'), $data));
-            foreach ($rate as $item) {
-                $this->mysql_model->insert(UNITPRICE, array('unitId' => $sql, 'to_unitId' => $item['id'], 'discount' => empty($item['rate'])?0:$item['rate']));
-            }
+			if(false != $rate){
+				foreach ($rate as $item) {
+					$this->mysql_model->insert(UNITPRICE, array('unitId' => $sql, 'to_unitId' => $item['id'], 'discount' => empty($item['rate'])?0:$item['rate']));
+				}
+			}
+            
             if ($this->db->trans_status() !== FALSE) {
                 $this->db->trans_commit();
                 $data['id'] = $sql;
@@ -128,7 +132,7 @@ class Unit extends CI_Controller
         $data['default'] = isset($data['default']) && $data['default'] == 'true' ? 1 : 0;
         $where = isset($data['id']) ? ' and (id<>' . $data['id'] . ')' : '';
 		$where .= ' and (isDelete = 0) ';
-        $this->mysql_model->get_count(UNIT, '(name="' . $data['name'] . '")' . $where) && str_alert(-1, '单位名称重复'.$where);
+        $this->mysql_model->get_count(UNIT, '(name="' . $data['name'] . '")' . $where) && str_alert(-1, '单位名称重复', $where);
         if (isset($data['id'])) {
             $this->mysql_model->get_count(GOODS, '(unitId=' . $data['id'] . ')') > 0 && str_alert(-1, '该单位已经被使用，不允许更改组');
         }

@@ -88,6 +88,8 @@ function initValidator() {
 		errorClass: "valid-error"
 	})
 }
+
+
 function postData() {
 	if (!$("#manage-form").validate().form()) return void $("#manage-form").find("input.valid-error").eq(0).focus();
 	var rate=[];
@@ -109,12 +111,17 @@ function postData() {
 		for (var f = defaultPage.SYSTEM.unitInfo, g = !0, h = 0; h < f.length; h++)(d == f[h].unitTypeId || f[h]["default"]) && (g = !1);
 		b["default"] = g
 	}
+	
 	Public.ajaxPost("../basedata/unit/" + ("add" == oper ? "add" : "update"), b, function(a) {
 		if (200 == a.status) {
 			if (parent.parent.Public.tips({
 				content: c + "完畢！"
-			}), "add" == oper) defaultPage.SYSTEM.unitInfo.push(a.data);
-			else for (var b = 0; b < defaultPage.SYSTEM.unitInfo.length; b++) defaultPage.SYSTEM.unitInfo[b].id == rowData.id && (defaultPage.SYSTEM.unitInfo[b] = a.data);
+			}), "add" == oper) { 
+				if(!defaultPage.SYSTEM.unitInfo){
+					defaultPage.SYSTEM.unitInfo = [];
+				}
+				defaultPage.SYSTEM.unitInfo.push(a.data);
+			}else for (var b = 0; b < defaultPage.SYSTEM.unitInfo.length; b++) defaultPage.SYSTEM.unitInfo[b].id == rowData.id && (defaultPage.SYSTEM.unitInfo[b] = a.data);
 			$("#rate").val(1).removeAttr("disabled").removeClass("ui-input-dis"), callback && "function" == typeof callback && callback(a.data, oper, window)
 		} else parent.parent.Public.tips({
 			type: 1,
