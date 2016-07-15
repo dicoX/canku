@@ -66,7 +66,7 @@ $(document).keydown(function(event) {
               </li>
               <li style="height:60px; ">
                 <label class="tit">商品：</label>
-                <span class="mod-choose-input" id="filter-goods"><input type="text" class="ui-input" id="goodsAuto"/></span>
+                <span class="mod-choose-input" id="filter-goods"><input type="text" class="ui-input" id="goodsAuto"/><span class="ui-icon-ellipsis"></span></span>
                 <p style="color:#999; padding:3px 0 0 0; ">（可用逗號分隔編號，例如1001,1008,2001。或者使用編碼段，例如1001--1009進行檢索）</p>
               </li>
               <li>

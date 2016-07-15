@@ -1330,13 +1330,14 @@ class Report extends CI_Controller {
         $storageNo = $this->input->get('storageNo', true);
         
         $where = ' 1 ';
+        $where .= ' and a.billType = "SALE"';
         if($beginDate) $where .= " and a.billDate >= '{$beginDate}' ";
         if($endDate) $where .= " and a.billDate <= '{$endDate}' ";
         if($customerNo) $where .= ' and b.number in('.str_quote($customerNo).') ';
-        if(!empty($hxStateCode)) $where .= " and a.hxStateCode = '{$hxStateCode}'";
+        if(strlen($hxStateCode) > 0) $where .= " and a.hxStateCode = '{$hxStateCode}'";
         if($goodsNo) $where .= ' and d.number in('.str_quote($goodsNo).') ';
         if($storageNo) $where .= " and e.id = '{$storageNo}'";
-        
+
         $order = ' a.billDate desc ';
         $group = ' a.billNo ';
         
