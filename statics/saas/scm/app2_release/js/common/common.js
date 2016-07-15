@@ -2294,12 +2294,17 @@ Business.billsEvent = function(obj, type, flag){
 										$.each(e.data, function(i, n){
                                             i += 1;
 											var tr = _this.find('tr').eq(i);
-                                            
+                                            n.gid = n.invId;
+                                            n.goods = n.goodsName + ' ' + n.spec;
                                             n.qty = Math.abs(n.qty);
                                             
-                                            var goods = n.goodsName + ' ' + n.spec;
+                                            $('#' + i).data('goodsInfo', n);
+                                            var storageInfo = {id: n.locationId, name: n.locationName, price: n.price};
+                                            $('#' + i).data('storageInfo', storageInfo);
+                                            $('#' + i).data('unitInfo', {unitId: n.unitId, name: n.mainUnit});
+                                            
                                             tr.find('td[aria-describedby="grid_gid"]').addClass('gid-' + n.invId).text(n.invId);
-                                            tr.find('td[aria-describedby="grid_goods"]').text(goods);
+                                            tr.find('td[aria-describedby="grid_goods"]').text(n.goods);
                                             tr.find('td[aria-describedby="grid_discountRate"]').text(n.discountRate);
                                             tr.find('td[aria-describedby="grid_deduction"]').text(n.deduction);
                                             tr.find('td[aria-describedby="grid_mainUnit"]').text(n.mainUnit);

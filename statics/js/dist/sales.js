@@ -1486,7 +1486,6 @@ var THISPAGE = {
                 if ("" !== h.goods) {
                     var i = $("#" + g).data("goodsInfo");
                     if (i) {
-						console.log(i);
                         var j = $("#" + g).data("storageInfo");
                         if (!j || !j.id) return parent.Public.tips({
                             type: 2,
@@ -1555,6 +1554,7 @@ var THISPAGE = {
                 content: "當前客戶資料不存在！"
             }), !1;
             var f = this._getEntriesData(a);
+            console.log(f);
             if (!f) return !1;
             if (f.length > 0) {
                 var g = $.trim(b.$_note.val()),

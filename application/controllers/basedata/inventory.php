@@ -506,7 +506,9 @@ class Inventory extends CI_Controller
         if($row){
             $where = "a.billNo = '{$row['billNo']}'";
             
-            $sql = "SELECT a.*, ABS(a.unitId) as unitId, b.name as mainUnit, c.name as locationName, d.name as goodsName, d.spec
+            $sql = "SELECT a.*, ABS(a.unitId) as unitId, b.name as mainUnit, 
+                        c.id as locationId, c.name as locationName, 
+                        d.name as goodsName, d.spec
                         FROM ".INVOICE_INFO." a
                         LEFT JOIN ".UNIT." b on b.id = ABS(a.unitId)
                         LEFT JOIN ".STORAGE." c on c.id = a.locationId
