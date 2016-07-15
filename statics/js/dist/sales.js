@@ -20,12 +20,6 @@ var THISPAGE = {
             })), this.addEvent(), setTimeout(function () {
                 $("#grid").jqGrid("nextCell", 1, 1)
             }, 10), $.cookie("BarCodeInsert") && THISPAGE.$_barCodeInsert.addClass("active"), this.goodsEdittypeInit();
-			$.post("../basedata/unit/unitRateAll", function(data){
-				if(200 == data.status){
-					unitPriceList = data.data;
-					console.log(unitPriceList);
-				}
-			})
         },
         initDom: function (a) {
             var b = this;

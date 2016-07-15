@@ -38,6 +38,9 @@ var CONFIG = {
 	DEFAULT_PAGE: true,
 	SERVICE_URL: '<?php echo base_url()?>'
 };
+if(CONFIG.SERVICE_URL == location.href){
+	location.href = CONFIG.SERVICE_URL + 'index.php/home/index'
+}
 //系统参数控制
 var SYSTEM = {
 	version: 1,
