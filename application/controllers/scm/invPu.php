@@ -108,7 +108,9 @@ class InvPu extends CI_Controller {
 	    $data = $this->input->post('postData',TRUE);
 		if (strlen($data)>0) {
 		    $data = (array)json_decode($data, true); 
+			// str_alert(-1,'提交的是空数据', $data); 
 			$data = $this->validform($data);
+			
 			$info = elements(array(
 				'billNo',
 				'billType',
@@ -132,6 +134,7 @@ class InvPu extends CI_Controller {
 				'modifyTime'
 				),$data);
 			$this->db->trans_begin();
+			
 			$iid = $this->mysql_model->insert(INVOICE,$info);   
 			$this->invoice_info($iid,$data);
 			$this->account_info($iid,$data);
@@ -141,7 +144,7 @@ class InvPu extends CI_Controller {
 			} else {
 			    $this->db->trans_commit(); 
 				$this->common_model->logs('新增购货 单据编号：'.$info['billNo']);
-				str_alert(200,'success',array('id'=>intval($iid))); 
+				str_alert(200,'success',array('id'=>intval($iid), 'billNo'=>str_no('CG'))); 
 			}
 		}
 		str_alert(-1,'提交的是空数据'); 
@@ -514,7 +517,7 @@ class InvPu extends CI_Controller {
 			count($invoice)<1 && str_alert(-1,'单据不存在、或者已删除');
 			$data['billNo'] =  $invoice['billNo'];	
 		} else {
-		    $data['billNo']      = str_no('CG');    //修改的时候屏蔽
+		    // $data['billNo']      = str_no('CG');    //修改的时候屏蔽
 		}
 		
 		$data['billType']        = 'PUR';

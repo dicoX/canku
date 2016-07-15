@@ -95,7 +95,7 @@ class Payment extends CI_Controller {
 		if (strlen($data)>0) {
 		     $data = (array)json_decode($data, true);
 			 $this->validform($data);
-			 $info['billNo']        = str_no('FKD');
+			 $info['billNo']        = $data['billNo']; //str_no('FKD');
 			 $info['billType']      = 'PAYMENT';
 			 $info['transTypeName'] = '付款';
 			 $info['transType']     = 153101;
@@ -152,7 +152,7 @@ class Payment extends CI_Controller {
 			 } else {
 			    $this->db->trans_commit();
 				$this->common_model->logs('新增付款单 单据编号：'.$info['billNo']);
-				str_alert(200,'success',array('id'=>$iid)); 
+				str_alert(200,'success',array('id'=>$iid, 'billNo'=>str_no('FKD'))); 
 			 }
 		} else {
 		    str_alert(-1,'提交的是空数据'); 
