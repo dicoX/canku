@@ -1369,7 +1369,7 @@ var THISPAGE = {
                     })
                 }
             }), $(".wrapper").on("click", "#print", function (a) {
-                /*a.preventDefault(), Business.verifyRight("SA_PRINT") && Public.print({
+                a.preventDefault(), Business.verifyRight("SA_PRINT") && Public.print({
                     title: "銷售出貨記錄",
                     $grid: $("#grid"),
                     pdf: "../scm/invSa/toPdf?action=toPdf",
@@ -1377,8 +1377,7 @@ var THISPAGE = {
                     filterConditions: {
                         id: originalData.id
                     }
-                })*/
-				a.preventDefault(), Business.verifyRight("SA_PRINT") && $(".wrapper").printTable()
+                })
             }), $(".wrapper").on("click", "#original", function (a) {
                 if (a.preventDefault(), originalData.buId <= 0) return parent.Public.tips({
                     type: 1,
