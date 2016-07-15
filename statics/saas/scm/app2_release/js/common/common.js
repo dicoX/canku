@@ -2245,7 +2245,7 @@ Business.billsEvent = function(obj, type, flag){
 						this.content.callback();
                         this.close();
                         
-						var _this = $('.sale-grid');
+						var _this = $('.sale-autoload-grid');
                         var e = THISPAGE.$_customer;
                         var c = e.data("contactInfo");
                         var contactId = c.id;

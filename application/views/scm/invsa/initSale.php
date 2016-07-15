@@ -70,7 +70,7 @@ $(document).keydown(function(event) {
       </dl>
     </div>
     <div class="grid-wrap">
-      <table id="grid" class="sale-grid">
+      <table id="grid" class="sale-grid  sale-autoload-grid">
       </table>
       <div id="page"></div>
     </div>

@@ -261,6 +261,8 @@ class Inventory extends CI_Controller
             $info = elements($info, $data, '');
 			$info['unitId'] = $info['baseUnitId'];
             $invId = $this->mysql_model->insert(GOODS, $info);
+			$data['id'] = $this->db->insert_id();
+			
 			$unitId = $data['baseUnitId'];
             if (strlen($data['propertys']) > 0) {
                 $list = (array)json_decode($data['propertys'], true);
@@ -273,12 +275,12 @@ class Inventory extends CI_Controller
                     $v[$arr]['amount'] = isset($row['amount']) ? $row['amount'] : 0;
                     $v[$arr]['skuId'] = isset($row['skuId']) ? $row['skuId'] : 0;
                     $v[$arr]['billDate'] = '2001-01-01';
-                    $v[$arr]['billNo'] = '其初數量';
+                    $v[$arr]['billNo'] = '期初數量';
                     $v[$arr]['billType'] = 'INI';
-                    $v[$arr]['transTypeName'] = '其初數量';
+                    $v[$arr]['transTypeName'] = '期初數量';
                 }
                 $this->mysql_model->insert(INVOICE_INFO, $v);
-				$data['id'] = $this->db->insert_id();
+				
             }
             if (!empty($data['customerPrice'])) {
                 $s = array();
@@ -294,6 +296,7 @@ class Inventory extends CI_Controller
                 $this->db->trans_rollback();
                 str_alert(-1, 'SQL错误回滚');
             } else {
+				$data['propertys'] = (array)json_decode($data['propertys'], true);
                 $this->db->trans_commit();
                 $this->common_model->logs('新增商品:' . $data['name']);
                 str_alert(200, 'success', $data);

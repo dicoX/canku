@@ -108,7 +108,7 @@ class InvPu extends CI_Controller {
 	    $data = $this->input->post('postData',TRUE);
 		if (strlen($data)>0) {
 		    $data = (array)json_decode($data, true); 
-			// str_alert(-1,'提交的是空数据', $data); 
+			
 			$data = $this->validform($data);
 			
 			$info = elements(array(
@@ -129,15 +129,15 @@ class InvPu extends CI_Controller {
 				'disRate',
 				'disAmount',
 				'uid',
-				'userName',
+				'userName', 
 				'accId',
 				'modifyTime'
 				),$data);
 			$this->db->trans_begin();
-			
-			$iid = $this->mysql_model->insert(INVOICE,$info);   
-			$this->invoice_info($iid,$data);
-			$this->account_info($iid,$data);
+			// str_alert(-1,'提交的是空数据', $d); 
+			$iid = $this->mysql_model->insert(INVOICE, $info);   
+			$this->invoice_info($iid, $data);
+			$this->account_info($iid, $data);
 			if ($this->db->trans_status() === FALSE) {
 			    $this->db->trans_rollback();
 				str_alert(-1,'SQL错误'); 
@@ -236,6 +236,7 @@ class InvPu extends CI_Controller {
 			$info['data']['totalTax']           = (float)$data['totalTax'];
 			$info['data']['totalAmount']        = (float)abs($data['totalAmount']);
 			$list = $this->data_model->get_invoice_info('and (iid='.$id.') order by id');  
+			// str_alert(-1,'单据不存在、或者已删除', $list); 
 			foreach ($list as $arr=>$row) {
 				$v[$arr]['invSpec']             = $row['invSpec'];
 				$v[$arr]['srcOrderEntryId']     = $row['srcOrderEntryId'];
@@ -246,7 +247,8 @@ class InvPu extends CI_Controller {
 				$v[$arr]['qty']                 = (float)abs($row['qty']);
 				$v[$arr]['amount']              = (float)abs($row['amount']);
 				$v[$arr]['taxAmount']           = (float)abs($row['taxAmount']);
-				$v[$arr]['price']               = (float)$row['price'];
+				// $v[$arr]['purPrice']            = (float)$row['purPrice'];
+				$v[$arr]['purPrice']               = (float)$row['price'];
 				$v[$arr]['tax']                 = (float)$row['tax'];
 				$v[$arr]['taxRate']             = (float)$row['taxRate'];
 				$v[$arr]['mainUnit']            = $row['mainUnit'];

@@ -660,7 +660,7 @@ var curRow, curCol, loading, SYSTEM = system = parent.SYSTEM,
 						});
 						b(a), k && THISPAGE.calTotal();
 						break;
-					case "price":
+					case "purPrice":
 						var d = parseFloat(d),
 							l = parseFloat($("#grid").jqGrid("getCell", a, f - 1)),
 							h = parseFloat($("#grid").jqGrid("getCell", a, f + 1));
@@ -1198,7 +1198,7 @@ var curRow, curCol, loading, SYSTEM = system = parent.SYSTEM,
 							}
 						}
 						f = {
-							invId: i.id,
+							invId: i.gid || i.id,
 							invNumber: i.number,
 							invName: i.name,
 							invSpec: i.spec,
@@ -1207,7 +1207,7 @@ var curRow, curCol, loading, SYSTEM = system = parent.SYSTEM,
 							unitId: k.unitId || -1,
 							mainUnit: k.name || "",
 							qty: h.qty,
-							price: h.price,
+							price: h.purPrice,
 							discountRate: h.discountRate,
 							deduction: h.deduction,
 							amount: h.amount,
