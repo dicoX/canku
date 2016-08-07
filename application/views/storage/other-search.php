@@ -33,7 +33,7 @@ $(document).keydown(function(event) {
     <ul>
       <li>
         <label>搜索条件:</label>
-        <input type="text" id="matchCon" class="ui-input con" value="请输入单据号或客户名或备注">
+        <input type="text" id="matchCon" class="ui-input con" placeholder="请输入单据号或客户名或备注">
       </li>
       <li>
         <label>日期:</label>

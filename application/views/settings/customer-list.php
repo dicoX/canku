@@ -40,7 +40,7 @@ $(document).keydown(function(event) {
 	        	<span id="catorage"></span>
 	        </li>
 	        <li>
-	          <input type="text" id="matchCon" class="ui-input ui-input-ph matchCon" value="輸入客戶編號/ 名稱/ 聯絡人/ 聯絡電話">
+	          <input type="text" id="matchCon" class="ui-input ui-input-ph matchCon" placeholder="輸入客戶編號/ 名稱/ 聯絡人/ 聯絡電話">
 	        </li>
 	        <li><a class="ui-btn mrb" id="search">檢索</a></li>
 	      </ul>

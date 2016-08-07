@@ -67,7 +67,7 @@ function initValidator() {
 							if (a.createTextRange) {
 								var e = a.createTextRange();
 								e.moveEnd("character", d), e.moveStart("character", c), e.select()
-							} else a.setSelectionRange(c, d), a.focus();
+							} else a.setSelectionRange(c, d);
 							$(a).data("tip", !0)
 						} else $(a).data("tip", !1)
 					}

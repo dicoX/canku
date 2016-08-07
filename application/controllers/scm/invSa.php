@@ -242,6 +242,7 @@ class InvSa extends CI_Controller
         $this->common_model->checkpurview(8);
         $id = intval($this->input->get_post('id', TRUE));
         $data = $this->data_model->get_invoice('and (a.id=' . $id . ') and billType="SALE"', 1);
+		// str_alert(-1, '单据不存在、或者已删除', $data);
         if (count($data) > 0) {
             $s = $v = array();
             $info['status'] = 200;
@@ -251,6 +252,7 @@ class InvSa extends CI_Controller
             $info['data']['cLevel'] = 0;
             $info['data']['contactName'] = $data['contactName'];
             $info['data']['salesId'] = intval($data['salesId']);
+			$info['data']['description'] = $data['description'];
             $info['data']['date'] = $data['billDate'];
             $info['data']['billNo'] = $data['billNo'];
             $info['data']['billType'] = $data['billType'];

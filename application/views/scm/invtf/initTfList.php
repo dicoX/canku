@@ -38,7 +38,7 @@ $(document).keydown(function(event) {
     <div class="fl">
       <ul class="ul-inline">
         <li>
-          <input type="text" id="matchCon" class="ui-input ui-input-ph con" value="请输入单据号或客户名或备注">
+          <input type="text" id="matchCon" class="ui-input ui-input-ph con" placeholder="请输入单据号或客户名或备注">
         </li>
         <li>
           <label>日期:</label>

@@ -136,7 +136,7 @@ function initGrid() {
 function initEvent() {
 	$_matchCon = $("#matchCon"), $_matchCon.placeholder(), $("#search").on("click", function(a) {
 		a.preventDefault();
-		var b = "輸入客戶編號/ 名稱/ 聯絡人/ 聯絡電話" === $_matchCon.val() ? "" : $.trim($_matchCon.val()),
+		var b = $.trim($_matchCon.val()),
 			c = catorageCombo ? catorageCombo.getValue() : -1;
 		$("#grid").jqGrid("setGridParam", {
 			page: 1,

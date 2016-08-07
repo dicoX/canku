@@ -157,7 +157,7 @@ var queryConditions = {
 					})
 				}
 			}), $("#search").click(function() {
-				queryConditions.matchCon = "请输入单据号或客户名或备注" === a.$_matchCon.val() ? "" : a.$_matchCon.val(), queryConditions.beginDate = a.$_beginDate.val(), queryConditions.endDate = a.$_endDate.val(), queryConditions.outLocationId = -1, queryConditions.inLocationId = -1, THISPAGE.reloadData(queryConditions)
+				queryConditions.matchCon =  a.$_matchCon.val(), queryConditions.beginDate = a.$_beginDate.val(), queryConditions.endDate = a.$_endDate.val(), queryConditions.outLocationId = -1, queryConditions.inLocationId = -1, THISPAGE.reloadData(queryConditions)
 			}), $("#moreCon").click(function() {
 				queryConditions.matchCon = a.$_matchCon.val(), queryConditions.beginDate = a.$_beginDate.val(), queryConditions.endDate = a.$_endDate.val(), $.dialog({
 					id: "moreCon",

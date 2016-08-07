@@ -2291,6 +2291,7 @@ Business.billsEvent = function(obj, type, flag){
                                     if(e.status == 200){
                                         var sum = 0;
                                         var num = 0;
+										var total = 0;
 										$.each(e.data, function(i, n){
                                             i += 1;
 											var tr = _this.find('tr').eq(i);
@@ -2318,6 +2319,7 @@ Business.billsEvent = function(obj, type, flag){
 										})
 										_this.parents('.ui-jqgrid-bdiv').next('.ui-jqgrid-sdiv').find('.footrow').find('td[aria-describedby="grid_amount"]').text(sum);
                                         _this.parents('.ui-jqgrid-bdiv').next('.ui-jqgrid-sdiv').find('.footrow').find('td[aria-describedby="grid_qty"]').text(num);
+										$("#amountArea").find(".ui-input-dis").val(sum);
 									}
                                 }, 'json')
                             }

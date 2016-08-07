@@ -40,7 +40,7 @@ a.ui-btn{margin-left:10px;}
     <div class="fl">
       <ul class="ul-inline">
         <li>
-          <input type="text" id="matchCon" class="ui-input ui-input-ph" value="請輸入單據編號/客戶名稱/備註">
+          <input type="text" id="matchCon" class="ui-input ui-input-ph" placeholder="請輸入單據編號/客戶名稱/備註">
         </li>
         <li>
           <label>日期：</label>

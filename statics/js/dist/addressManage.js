@@ -19,7 +19,7 @@ $(function() {
 		$isDefault: $("#isDefault"),
 		init: function() {
 			mod_AreasCombo.init(_page.$province, _page.$city, _page.$area, function() {
-				_page.provinceCombo = mod_AreasCombo.provinceCombo, _page.cityCombo = mod_AreasCombo.cityCombo, _page.areaCombo = mod_AreasCombo.areaCombo;
+				_page.provinceCombo = mod_AreasCombo.provinceCombo, _page.cityCombo = mod_AreasCombo.cityCombo;
 				var b = 1 == c.isDefault ? 0 : 1;
 				f = c.isDefault ? !0 : !1;
 				var d = e ? f : !0;
@@ -37,7 +37,7 @@ $(function() {
 					defaultSelected: b || void 0,
 					editable: !1,
 					disabled: !d
-				}).getCombo(), _page.$shortName.val(c.shortName), _page.$postalcode.val(c.postalcode), _page.provinceCombo.selectByText(c.province), _page.cityCombo.selectByText(c.city), _page.areaCombo.selectByText(c.area || c.county), _page.$address.val(c.address), _page.$linkman.val(c.linkman), _page.$phone.val(c.phone), _page.$mobile.val(c.mobile), $("#province").find("input").attr("name", "provinceInput"), $("#city").find("input").attr("name", "cityInput"), $("#area").find("input").attr("name", "areaInput"), a.initButton(), a.initValidator(), _page.$shortName.focus().select()
+				}).getCombo(), _page.$shortName.val(c.shortName), _page.$postalcode.val(c.postalcode), _page.provinceCombo.selectByText(c.province), _page.cityCombo.selectByText(c.city), _page.$area.val(c.area), _page.$address.val(c.address), _page.$linkman.val(c.linkman), _page.$phone.val(c.phone), _page.$mobile.val(c.mobile), $("#province").find("input").attr("name", "provinceInput"), $("#city").find("input").attr("name", "cityInput"), $("#area").find("input").attr("name", "areaInput"), a.initButton(), a.initValidator(), _page.$shortName.focus().select()
 			})
 		}
 	}, _event = {}, a.initButton = function() {
@@ -148,7 +148,7 @@ $(function() {
 			f = $.trim(_page.$postalcode.val()),
 			g = _page.provinceCombo.getText(),
 			h = _page.cityCombo.getText(),
-			i = _page.areaCombo.getText(),
+			i = $.trim(_page.$area.val()),
 			j = $.trim(_page.$address.val()),
 			k = $.trim(_page.$linkman.val()),
 			l = $.trim(_page.$phone.val()),
@@ -179,7 +179,7 @@ $(function() {
 			isDefault: n
 		}, d(params, api)
 	}, _page.init(), window.resetForm = function() {
-		$("#manage-form").validate().resetForm(), _page.$shortName.val(""), _page.$postalcode.val(""), _page.provinceCombo.selectByText(""), _page.cityCombo.selectByText(""), _page.areaCombo.selectByText(""), _page.$address.val(""), _page.$linkman.val(""), _page.$phone.val(""), _page.$mobile.val(""), _page.isDefaultCombo.selectByText("否"), e && "add" == b && _page.isDefaultCombo.disable()
+		$("#manage-form").validate().resetForm(), _page.$shortName.val(""), _page.$postalcode.val(""), _page.provinceCombo.selectByText(""), _page.cityCombo.selectByText(""), _page.$area.val(""), _page.$address.val(""), _page.$linkman.val(""), _page.$phone.val(""), _page.$mobile.val(""), _page.isDefaultCombo.selectByText("否"), e && "add" == b && _page.isDefaultCombo.disable()
 	}
 });
 var mod_AreasCombo = function(a) {
@@ -199,13 +199,16 @@ var mod_AreasCombo = function(a) {
 					beforeChange: null,
 					onChange: function() {
 						switch (this) {
-						case a.provinceCombo:
-							a.cityCombo.loadData(d(a.provinceCombo.getValue()), -1, !1), a.areaCombo.loadData([], -1, !1);
+							case a.provinceCombo:
+							{
+								a.cityCombo.loadData(d(a.provinceCombo.getValue()), -1, !1);
+							}break;
+							case a.cityCombo:
+							{
+								
+							}break;
+							default:
 							break;
-						case a.cityCombo:
-							a.areaCombo.loadData(e(a.cityCombo.getValue()), -1, !1);
-							break;
-						case a.areaCombo:
 						}
 					},
 					onExpand: null,
@@ -262,7 +265,7 @@ var mod_AreasCombo = function(a) {
 						type: j[i].type,
 						parent_id: j[i].parent_id
 					});
-					a.provinceCombo = b(f, c()), a.cityCombo = b(g, []), a.areaCombo = b(h, []), o()
+					a.provinceCombo = b(f, c()), a.cityCombo = b(g, []), o()
 				} else parent.Public.tips({
 					type: 1,
 					content: "初始化區域失敗！"

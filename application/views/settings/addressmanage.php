@@ -77,7 +77,7 @@ body{background: #fff;}
 			</li>
 			<li class="row-item">
 				<div class="label-wrap"><label for="area">堂區：</label></div>
-				<div class="ctn-wrap"><span id="area"></span></div>
+				<div class="ctn-wrap"><input type="text" value="" class="ui-input" name="area" id="area"></div>
 			</li>
 			<li class="row-item p1">
 				<div class="label-wrap"><label for="address">詳細地址：</label></div>
