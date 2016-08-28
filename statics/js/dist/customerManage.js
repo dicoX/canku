@@ -107,6 +107,7 @@ function initValidator() {
 function postCustomerData() {
 	var a = "add" == oper ? "添加新客戶" : "編輯客戶資料",
 		b = getCustomerData(),
+		
 		c = b.firstLink || {};
 	delete b.firstLink, Public.ajaxPost("../basedata/contact/" + ("add" == oper ? "add" : "update"), b, function(d) {
 		if (200 == d.status) {
@@ -155,9 +156,26 @@ function getEntriesData() {
 			linkAddress: i.address,
 			linkFirst: "是" == i.first ? 1 : 0
 		};
-		var j = $("#" + h).data("addressInfo") || {};
-		g.province = j.province, g.city = j.city, g.county = j.county, g.address = j.address, g.id = "edit" == oper && -1 != $.inArray(h, linksIds) ? h : 0, "是" == i.first && (d = !0, a.firstLink = g), b.push(g)
+		//var j = $("#" + h).data("addressInfo") || {};
+		//g.province = j.province, g.city = j.city, g.county = j.county, g.address = j.address, g.id = "edit" == oper && -1 != $.inArray(h, linksIds) ? h : 0, "是" == i.first && (d = !0, a.firstLink = g), b.push(g)
+		console.log($("#" + h).find("td:eq(4)"), h);
+		var j = $("#" + h).find("td:eq(4)").attr("title");
+		if(j) {
+			j = j.split('-');
+			g.province = j[0];
+			g.city = j[1];
+			g.county = j[2];
+			g.address = j[3];
+		}else{
+			g.province = '';
+			g.city = '';
+			g.county = '';
+			g.address = '';
+		}
+		g.id = "edit" == oper && -1 != $.inArray(h, linksIds) ? h : 0, "是" == i.first && (d = !0, a.firstLink = g), b.push(g);
+		// console.log(g);
 	}
+	// console.log(b);
 	return !d && b.length > 0 && (b[0].linkFirst = 1, a.firstLink = b[0]), a.entriesData = b, a
 }
 function getTempData(a) {
@@ -253,16 +271,31 @@ function initEvent() {
 		a.preventDefault();
 		var b = $(this).siblings(),
 			c = $(this).closest("tr"),
-			d = c.data("addressInfo");
+			d = c.find("td:eq(4)").attr("title"),
+			k = {};
+		if(d) {
+			d = d.split('-');
+			k = {
+				province: d[0],
+				city: d[1],
+				'area': d[2],
+				address: d[3],
+			};
+		}
 		parent.$.dialog({
 			title: "聯絡地址",
 			content: "url:../settings/addressManage",
 			data: {
-				rowData: d,
+				rowData: k,
 				callback: function(a, d) {
 					if (a) {
 						var e = {};
-						e.province = a.province || "", e.city = a.city || "", e.county = a.area || "", e.address = a.address || "", b.val(e.province + e.city + e.county + e.address), c.data("addressInfo", e)
+						e.province = a.province || "", e.city = a.city || "", e.county = a.area || "", e.address = a.address || "";
+						var ccc = e.province +'-'+ e.city +'-'+ e.county +'-'+ e.address;
+						if(ccc != '---'){
+							b.val(ccc);
+							c.find("td:eq(4)").attr("title", ccc)
+						}
 					}
 					d.close()
 				}
@@ -409,7 +442,9 @@ function initGrid(a) {
 function addressFmt(a, b, c) {
 	if (a) return a;
 	var d = {};
-	return d.province = c.province || "", d.city = c.city || "", d.county = c.county || "", d.address = c.address || "", $("#" + c.id).data("addressInfo", d), d.province + d.city + d.county + d.address || "&#160;"
+	d.province = c.province || "", d.city = c.city || "", d.county = c.county || "", d.address = c.address || "";
+	var add = d.province +'-'+ d.city +'-'+ d.county +'-'+ d.address;
+	return add == '---' ? "&#160;" : add
 }
 function addressElem() {
 	var a = $(".address")[0];
