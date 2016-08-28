@@ -93,7 +93,7 @@ $(document).keydown(function(event) {
                 </li>
               </ul>
               <div class="btn-row">
-                <a href="authority.jsp" class="ui-btn mrb">返回列表頁</a><a href="#" class="ui-btn ui-btn-sp" id="registerBtn">下一步</a>
+                <a href="../settings/authority" class="ui-btn mrb">返回列表頁</a><a href="#" class="ui-btn ui-btn-sp" id="registerBtn">下一步</a>
               </div>
             </form>
         </div>

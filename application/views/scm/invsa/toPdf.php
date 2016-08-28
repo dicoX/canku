@@ -25,7 +25,7 @@
 		
 		<table width="800" align="center">
 			<tr height="15" align="left">
-				<td width="425" style="font-family:'宋体';font-size:12px;height:20px;padding-left:35px;"><?php echo $contactNo.' '.$contactName?> </td>
+				<td width="425" style="font-family:'宋体';font-size:12px;height:20px;padding-left:35px;padding-top:15px;"><?php echo $contactNo.' '.$contactName?> </td>
 				<td width="120" style="font-family:'宋体'; font-size:12px;height:20px;"><?php echo $billNo?></td>
 			</tr>
 			<tr height="15" align="left">
@@ -35,7 +35,7 @@
 				  foreach ($array as $arr1=>$row1) {
 					  if ($row1['linkFirst']==1) {
 				?>				
-				<td style="font-family:'宋体'; font-size:12px;height:20px;padding-left:35px;"><?php echo @$row1['address']?> </td>
+				<td style="font-family:'宋体'; font-size:12px;height:20px;padding-left:35px;"><?php echo @$row1['address']?>(Tel: <?php echo @$row1['linkMobile'] ?>) </td>
 				<?php } else {?>
 				<td></td>
 				<?php }}}?>
@@ -87,7 +87,7 @@
 				 <?php if ($t==$countpage) {?>
 				 <tr style="height:20px">
 				  <td width="10"></td>
-					<td width="450"></td>
+					<td width="450">備註：<?php echo $description ?></td>
 					<td width="60"></td>
 					<td width="70"></td>
 					<td width="110" align="right" style="font-family:'黑体'; font-size:14px;"><strong><?php echo str_money(abs($totalAmount),2)?></strong></td>

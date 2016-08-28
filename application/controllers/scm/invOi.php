@@ -1344,7 +1344,12 @@ class InvOi extends CI_Controller {
 		$where .= strlen($goods)>0 ? ' and (b.name like "%'.$goods.'%")' : '';
 		$where .= $locationId>0 ? ' and locationId='.$locationId.'' : ''; 
 		$where .= $categoryId>0 ? ' and categoryId='.$categoryId.'' : ''; 
-		$having = $showZero == 1 ? ' HAVING qty=0' : '';
+		if($showZero == 1){
+			$having = '';
+		} else {
+			$having = ' HAVING qty<>0';
+		}
+		// $having = $showZero == 1 ? ' HAVING qty=0' : '';
 		$offset = $rows * ($page-1);
 		$data['data']['page']      = $page;
 		$data['data']['records']   = $this->data_model->get_inventory($where.' GROUP BY invId'.$having,3);   //总条数
