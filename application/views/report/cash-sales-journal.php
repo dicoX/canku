@@ -78,7 +78,10 @@ $(document).keydown(function(event) {
                 <span class="mod-choose-input" id="filter-transTypeName"><select  name="transTypeName" id="transTypeName">
                         <option value="">全部</option>
                         <option value="銷售出貨">銷售出貨</option>
-                        <option value="购货">採購入貨</option>
+                        <option value="购货">购货</option>
+						<option value="退货">退货</option>
+						<option value="期初余额">期初余额</option>
+						<option value="其他入库">其他入库</option>
                     </select></span>
               </li>
               <!--
