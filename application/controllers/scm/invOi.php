@@ -153,7 +153,7 @@ class InvOi extends CI_Controller {
 		if (strlen($data)>0) {
 		    $data = (array)json_decode($data, true); 
 			$this->validform($data);
-			$info['billNo']          = str_no('QTRK');
+			$info['billNo']          = $data['billNo']; //str_no('QTRK');
 			$info['billType']        = 'OI';
 			$info['buId']            = intval($data['buId']);
 			$info['billDate']        = $data['date'];   
@@ -194,7 +194,7 @@ class InvOi extends CI_Controller {
 			 } else {
 			    $this->db->trans_commit();
 				$this->common_model->logs('新增其他入库 单据编号：'.$info['billNo']);
-				str_alert(200,'success',array('id'=>intval($iid))); 
+				str_alert(200,'success',array('id'=>intval($iid), 'billNo'=>str_no('QTRK'))); 
 			 }
 		}
 		str_alert(-1,'提交的是空数据'); 

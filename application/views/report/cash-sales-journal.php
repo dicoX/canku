@@ -71,7 +71,15 @@ $(document).keydown(function(event) {
               </li>
               <li>
                 <label class="tit">倉庫：</label>
-                <span class="mod-choose-input" id="filter-storage"><input type="text" class="ui-input" id="storageAuto"/><span class="ui-icon-ellipsis"></span></span>
+                <span class="mod-choose-input" id="filter-storage"><input type="text" id="storageAuto"/><span class="ui-icon-ellipsis"></span></span>
+              </li>
+			  <li>
+                <label class="tit">業務類型：</label>
+                <span class="mod-choose-input" id="filter-transTypeName"><select  name="transTypeName" id="transTypeName">
+                        <option value="">全部</option>
+                        <option value="銷售出貨">銷售出貨</option>
+                        <option value="购货">採購入貨</option>
+                    </select></span>
               </li>
               <!--
               <li class="chk-list dn" id="profit-wrap">
@@ -82,7 +90,7 @@ $(document).keydown(function(event) {
               -->
               <li class="chk-list dn" id="profit-wrap">
                 <label>收款状态：</label>
-                    <select name="hxStateCode" id="hxStateCode">
+                    <select name="hxStateCode"  class="ui-input" id="hxStateCode">
                         <option value="">全部</option>
                         <option value="0">未付款</option>
                         <option value="1">部分付款</option>

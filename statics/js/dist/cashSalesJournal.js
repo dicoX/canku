@@ -15,7 +15,8 @@ define(["jquery", "print"], function(a) {
 				goodsNo: i("#filter-goods input").val() || "",
 				storageNo: i("#filter-storage input").val() || "",
 				profit: "",
-                hxStateCode: i('#hxStateCode').val() || ""
+                hxStateCode: i('#hxStateCode').val() || "",
+				transTypeName: i('#transTypeName').val() || ""
 			}, i("#selected-period").text(b + "至" + c), i("div.grid-subtitle").text("日期: " + b + " 至 " + c), chkVals = chkboxes.chkVal();
 			for (var d = 0, e = chkVals.length; e > d; d++) k[chkVals[d]] = 1;
 			var f = k.profit;
@@ -30,7 +31,8 @@ define(["jquery", "print"], function(a) {
             k.customerNo = "", 
             k.goodsNo = "", 
             k.storageNo = "",
-            k.hxStateCode = ""
+            k.hxStateCode = "",
+			k.transTypeName = ""
 		})
 	}
 	function c() {
@@ -203,6 +205,7 @@ define(["jquery", "print"], function(a) {
 			storageNo: "",
 			profit: "",
             hxStateCode: "",
+			transTypeName: "",
 		}, Public.urlParam()),
 		l = "../report/cash_sales_journal_customerExporter?action=customerExporter",
 		m = "../report/cash_sales_journal_customer?action=customer";
