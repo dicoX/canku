@@ -13,7 +13,7 @@
     </head>    
 <body id="body">
     <div class="connext">
-   <form method="post" action="<?php echo site_url('login');?>" name="main_login" onSubmit="return check_main_login()">
+   <form method="post" action="<?php echo site_url('login');?>" name="main_login">
         <div class="LoginBox">
             <div class="LoginLog"><b>『興利製麵家』倉儲系統</b></div>
             <div class="Loginc">

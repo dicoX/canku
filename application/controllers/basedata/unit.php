@@ -38,22 +38,32 @@ class Unit extends CI_Controller
         $this->common_model->checkpurview(78);
         $data = str_enhtml($this->input->post(NULL, TRUE));
         $rate = element('rate', $data);
-		//str_alert(-1, '2333', $rate);
         $this->db->trans_begin();
         if (count($data) > 0) {
             $data = $this->validform($data);
-            $sql = $this->mysql_model->insert(UNIT, elements(array('name', 'default'), $data));
+            $iid = $this->mysql_model->insert(UNIT, elements(array('name', 'default'), $data));
+            // str_alert(-1, '2333', $sql);
 			if(false != $rate){
 				foreach ($rate as $item) {
-					$this->mysql_model->insert(UNITPRICE, array('unitId' => $sql, 'to_unitId' => $item['id'], 'discount' => empty($item['rate'])?0:$item['rate']));
+					$this->mysql_model->insert(UNITPRICE, array(
+                        'unitId' => $iid, 
+                        'to_unitId' => $item["id"], 
+                        'discount' => empty($item['rate']) ? 0 : floatval($item['rate'])
+                    ));
+                    $ra = empty($item['rate']) ? 0 : floatval(number_format(1/$item['rate'], 3));
+                    $this->mysql_model->insert(UNITPRICE, array(
+                        'unitId' => $item["id"], 
+                        'to_unitId' => $iid, 
+                        'discount' => $ra
+                    ));
 				}
 			}
             
             if ($this->db->trans_status() !== FALSE) {
                 $this->db->trans_commit();
-                $data['id'] = $sql;
+                $data['id'] = $iid;
                 $this->common_model->logs('新增单位:' . $data['name']);
-                die('{"status":200,"msg":"success","data":{"default":false,"guid":"","id":' . $sql . ',"isdelete":0,"name":"' . $data['name'] . '","rate":1,"unitTypeId":0}}');
+                die('{"status":200,"msg":"success","data":{"default":false,"guid":"","id":' . $iid . ',"isdelete":0,"name":"' . $data['name'] . '","rate":1,"unitTypeId":0}}');
                 str_alert(200, 'success', $data);
             }else{
                 $this->db->trans_rollback();
@@ -70,38 +80,61 @@ class Unit extends CI_Controller
         $id = intval($this->input->post('id', TRUE));
         $data = str_enhtml($this->input->post(NULL, TRUE));
         $rate = element('rate', $data);
-        $this->db->trans_begin();
         if (count($data) > 0) {
-			// str_alert(200, 'success', );
+            $this->db->trans_begin();
             $data = $this->validform($data);
             $sql = $this->mysql_model->update(UNIT, elements(array('name', 'default'), $data), '(id=' . $id . ')');
             foreach ($rate as $item) {
-				
-                $unit = $this->mysql_model->get_row(UNITPRICE, '(unitId=' . $id . ') and (to_unitId=' . $item['id'].') ', 'discount');
-				if($unit != $item['rate'])
+                
+                $unit = $this->mysql_model->get_row(UNITPRICE, '(unitId=' . $id . ') and (to_unitId=' . $item['id'] .') ');
+                $unit2 = $this->mysql_model->get_row(UNITPRICE, '(unitId=' . $item['id'] . ') and (to_unitId=' . $id .') ');
+                $isu = 0;
+                if (count($unit) > 0) {
+                    if ($unit['discount'] != $item['rate'] ) {
+                        $this->mysql_model->update(UNITPRICE, array(
+                            'discount' => floatval($item['rate'])
+                        ), '(unitId=' . $id . ') and to_unitId=' . $item['id']);
+                        $isu = 1;
+                    }
+                } else {
+                    $iid = $this->mysql_model->insert(UNITPRICE, array(
+                        'unitId' => $id, 
+                        'to_unitId' => $item['id'], 
+                        'discount' => floatval($item['rate'])
+                    ));
+                    $isu = 1;
+                }
+
+				if($isu)
 				{
-					// str_alert(200, 'success', $unit.$item['id']);
-					if (!empty($unit) || 0 == $unit) {
-						$this->mysql_model->update(UNITPRICE, array('discount' => $item['rate']), '(unitId=' . $id . ') and to_unitId=' . $item['id']);
-					} else {
-						$this->mysql_model->insert(UNITPRICE, array('unitId' => $id, 'to_unitId' => $item['id'], 'discount' => $item['rate']));
-					}
+                    $ra = floatval(number_format(1/$item['rate'], 3));
+                    if (count($unit2) > 0) {
+                        $this->mysql_model->update(UNITPRICE, array(
+                            'discount' => $ra
+                        ), '(unitId=' . $item['id'] . ') and to_unitId=' . $id);
+                    } else {
+                        $iid = $this->mysql_model->insert(UNITPRICE, array(
+                            'unitId' => $item['id'], 
+                            'to_unitId' => $id, 
+                            'discount' => $ra
+                        ));
+                    }
 				}
-				
             }
             if ($sql) {
-                $data['id'] = $id;
-                $data['unitTypeId'] = isset($data['unitTypeId']) ? intval($data['unitTypeId']) : 0;
-                $data['rate'] = isset($data['rate']) ? intval($data['rate']) : 0;
+                // $data['id'] = $id;
+                // $data['unitTypeId'] = isset($data['unitTypeId']) ? intval($data['unitTypeId']) : 0;
+                // $data['rate'] = isset($data['rate']) ? intval($data['rate']) : 0;
                 $this->mysql_model->update(GOODS, array('unitName' => $data['name']), '(baseUnitId=' . $id . ')');
             }
+
             if ($this->db->trans_status() !== FALSE) {
                 $this->db->trans_commit();
                 $this->common_model->logs('更新单位:' . $data['name']);
                 str_alert(200, 'success', $data);
             } else {
                 $this->db->trans_rollback();
-                str_alert(-1, '更新失败');
+                str_alert(-1, '更新失败2');
             }
         }
         str_alert(-1, '更新失败');
@@ -116,7 +149,9 @@ class Unit extends CI_Controller
         if (count($data) > 0) {
             $info['isDelete'] = 1;
             $this->mysql_model->get_count(GOODS, '(unitId=' . $id . ')') > 0 && str_alert(-1, '该单位已经被使用，不允许删除');
+            
             $sql = $this->mysql_model->update(UNIT, $info, '(id=' . $id . ')');
+            $this->mysql_model->delete(UNITPRICE, "(unitId='".$id."' or to_unitId='".$id."')");
             if ($sql) {
                 $this->common_model->logs('删除单位:ID=' . $id . ' 名称:' . $data['name']);
                 str_alert(200, 'success', array('msg' => '成功删除', 'id' => '[' . $id . ']'));
@@ -134,7 +169,7 @@ class Unit extends CI_Controller
 		$where .= ' and (isDelete = 0) ';
         $this->mysql_model->get_count(UNIT, '(name="' . $data['name'] . '")' . $where) && str_alert(-1, '单位名称重复', $where);
         if (isset($data['id'])) {
-            $this->mysql_model->get_count(GOODS, '(unitId=' . $data['id'] . ')') > 0 && str_alert(-1, '该单位已经被使用，不允许更改组');
+            // $this->mysql_model->get_count(GOODS, '(unitId=' . $data['id'] . ')') > 0 && str_alert(-1, '该单位已经被使用，不允许更改组');
         }
         return $data;
     }
@@ -148,8 +183,10 @@ class Unit extends CI_Controller
         foreach ($list as $item) {
             $m['id'] = $item['id'];
             $m['name'] = $item['name'];
-            $unit = $this->mysql_model->get_row(UNITPRICE, '(unitId=' . $id . ') and to_unitId=' . $item['id'], 'discount');
-            $m['discount'] = isset($unit) && !empty($unit) ? $unit : 0;
+            
+            $unit = $this->mysql_model->get_row(UNITPRICE, '(unitId=' . $id . ') and to_unitId=' . $item['id']);
+            $m['discount'] = isset($unit) && !empty($unit) ? $unit['discount'] : 0;
+            // str_alert(-1, '删除失败', $unit);
             $data[] = $m;
         }
 

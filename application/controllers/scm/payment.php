@@ -148,7 +148,7 @@ class Payment extends CI_Controller {
 			 $this->mysql_model->update(INVOICE,$info,'(id='.$iid.')');
 			 if ($this->db->trans_status() === FALSE) {
 			    $this->db->trans_rollback();
-				str_alert(-1,'SQL错误回滚'); 
+				str_alert(-1,'系統錯誤'); 
 			 } else {
 			    $this->db->trans_commit();
 				$this->common_model->logs('新增付款单 单据编号：'.$info['billNo']);
@@ -231,7 +231,7 @@ class Payment extends CI_Controller {
 			 $this->mysql_model->update(INVOICE,$info,'(id='.$id.')');
 			 if ($this->db->trans_status() === FALSE) {
 			    $this->db->trans_rollback();
-				str_alert(-1,'SQL错误回滚'); 
+				str_alert(-1,'系統錯誤'); 
 			 } else {
 			    $this->db->trans_commit();
 				$this->common_model->logs('修改收款单 单据编号：'.$invoice['billNo']);

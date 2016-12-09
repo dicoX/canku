@@ -336,7 +336,22 @@ class InvSa extends CI_Controller
             $data['system'] = $this->common_model->get_option('system');
             $list = $this->data_model->get_invoice_info('and (iid=' . $id . ') order by id');
             $data['countpage'] = ceil(count($list) / $data['num']);   //共多少页
+            $tel = '';
+            $desc =  '';
             foreach ($list as $arr => $row) {
+                if (!$tel) {
+                    $uid = $row['buId'];
+                    $link = $this->mysql_model->get_row(CONTACT, '(id=' . $uid . ')', 'linkMans');
+                    if($link) {
+                        $l = json_decode($link);
+                        $tel = $l[0]->linkMobile;
+                    }
+                }
+                if (!$desc) {
+                    $desc = $row['descrip'];
+                    // var_dump($row);
+                }
+                // var_dump($row);
                 $data['list'][] = array(
                     'i' => $arr + 1,
                     'goods' => $row['invNumber'] . ' ' . $row['invName'],
@@ -350,6 +365,8 @@ class InvSa extends CI_Controller
                 );
             }
             ob_start();
+            $data['desc'] = $desc;
+            $data['tel'] = $tel;
             $this->load->view('scm/invsa/toPdf', $data);
             $content = ob_get_clean();
             require_once('./application/libraries/html2pdf/html2pdf.php');

@@ -97,7 +97,7 @@ $(document).keydown(function(event) {
         </li>
         <li>
           <label id="paymentTxt">是次實收：</label>
-          <input type="text" id="payment" class="ui-input">&emsp;
+          <input type="text" id="payment" class="ui-input" data-ref="actpay">&emsp;
         </li>
         <li id="accountWrap" class="dn">
           <label>結算賬戶：</label>
@@ -112,6 +112,13 @@ $(document).keydown(function(event) {
         <li class="dn">
           <label>累計差額：</label>
           <input type="text" id="totalArrears" class="ui-input ui-input-dis" disabled>
+        </li>
+        <li>
+          <label>收款情况：</label>
+          <select name="hadPay" id="hadPay" class='ui-input'>
+            <option value='0'>未收款</option>
+            <option value='1'>已收款</option>
+          </select>
         </li>
       </ul>
       <ul class="c999 cf">

@@ -49,7 +49,7 @@ class Data_model extends CI_Model{
 	//获取库存 用于判断库存是否满足
 	//分 商品、仓库、单位
 	public function get_invoice_info_inventory() {
-	    $sql = 'SELECT a.invId, a.locationId, a.unitId, b.baseUnitId, sum(a.qty) as qty 
+	    $sql = 'SELECT a.invId, a.locationId, a.unitId, b.baseUnitId, sum(a.qty), b.name as qty 
 			FROM '. INVOICE_INFO. ' as a 
 			left JOIN '. GOODS .' as b on a.invId = b.id 
 			group by a.invId, a.locationId, a.unitId';
@@ -223,10 +223,12 @@ class Data_model extends CI_Model{
 		}
 	    $sql = 'select 
 		            a.*, 
+					
 					b.name as invName, b.number as invNumber, b.spec as invSpec, u.name as mainUnit, 
 					c.number as contactNo, c.name as contactName,
 					d.name as locationName ,d.locationNo ,
-					e.number as salesNo ,e.name as salesName
+					e.number as salesNo ,e.name as salesName , 
+					k.description as descrip 
 				from '.INVOICE_INFO.' as a 
 					left join 
 						(select 
@@ -258,7 +260,8 @@ class Data_model extends CI_Model{
 					on a.salesId=e.id 	
 					left join 
 						'.UNIT.' as u on a.unitId = u.id
-					'.$w.'
+					left join 
+						'.INVOICE.' as k on a.iid = k.id
 				where 
 					(a.isDelete=0 '. $w2 .' ) 
 				'.$where;
@@ -480,7 +483,7 @@ class Data_model extends CI_Model{
 	    $sql = 'select 
 		            invId,
 					locationId,
-					billDate,
+					MAX(billDate),
 					sum(qty) as qty,
 					sum(case when transType=150501 or transType=150502 or transType=150807 or transType=150706 or billType="INI" then amount else 0 end) as incost,
 					sum(case when transType=150501 or transType=150502 or transType=150706 or billType="INI" then qty else 0 end) as inqty

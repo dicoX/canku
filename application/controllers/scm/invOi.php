@@ -153,7 +153,7 @@ class InvOi extends CI_Controller {
 		if (strlen($data)>0) {
 		    $data = (array)json_decode($data, true); 
 			$this->validform($data);
-			$info['billNo']          = $data['billNo']; //str_no('QTRK');
+			$info['billNo']          = $data['billNo'];
 			$info['billType']        = 'OI';
 			$info['buId']            = intval($data['buId']);
 			$info['billDate']        = $data['date'];   
@@ -190,11 +190,11 @@ class InvOi extends CI_Controller {
 			 
 			 if ($this->db->trans_status() === FALSE) {
 			    $this->db->trans_rollback();
-				str_alert(-1,'SQL错误回滚'); 
+				str_alert(-1,'系統錯誤'); 
 			 } else {
 			    $this->db->trans_commit();
 				$this->common_model->logs('新增其他入库 单据编号：'.$info['billNo']);
-				str_alert(200,'success',array('id'=>intval($iid), 'billNo'=>str_no('QTRK'))); 
+				str_alert(200,'success', array('id' => intval($iid), 'billNo'=>str_no('QTRK')));
 			 }
 		}
 		str_alert(-1,'提交的是空数据'); 
@@ -253,7 +253,7 @@ class InvOi extends CI_Controller {
 			 }
 			 if ($this->db->trans_status() === FALSE) {
 			    $this->db->trans_rollback();
-				str_alert(-1,'SQL错误回滚'); 
+				str_alert(-1,'系統錯誤'); 
 			 } else {
 			    $this->db->trans_commit();
 				$this->common_model->logs('修改其他入库 单据编号：'.$invoice['billNo']);
@@ -465,7 +465,7 @@ class InvOi extends CI_Controller {
 			 }
 			 if ($this->db->trans_status() === FALSE) {
 			    $this->db->trans_rollback();
-				str_alert(-1,'SQL错误回滚'); 
+				str_alert(-1,'系統錯誤'); 
 			 } else {
 			    $this->db->trans_commit();
 				$this->common_model->logs('单据编号：'.$invoice['billNo'].'的单据已被审核！');
@@ -524,7 +524,7 @@ class InvOi extends CI_Controller {
 			 }
 			 if ($this->db->trans_status() === FALSE) {
 			    $this->db->trans_rollback();
-				str_alert(-1,'SQL错误回滚'); 
+				str_alert(-1,'系統錯誤'); 
 			 } else {
 			    $this->db->trans_commit();
 				$this->common_model->logs('单据编号：'.$invoice['billNo'].'的单据已被审核！');
@@ -547,6 +547,8 @@ class InvOi extends CI_Controller {
 		$beginDate = str_enhtml($this->input->get_post('beginDate',TRUE));
 		$endDate   = str_enhtml($this->input->get_post('endDate',TRUE));
 		$locationId   = intval($this->input->get_post('locationId',TRUE));
+		$transTypeId   = intval($this->input->get_post('transTypeId',TRUE));
+
 		$where = ' and a.billType="OO"';
 		$where .= $matchCon  ? ' and (b.name like "%'.$matchCon.'%" or description like "%'.$matchCon.'%" or billNo like "%'.$matchCon.'%")' : ''; 
 		$where .= $beginDate ? ' and a.billDate>="'.$beginDate.'"' : ''; 
@@ -631,7 +633,9 @@ class InvOi extends CI_Controller {
 		if (strlen($data)>0) {
 		    $data = (array)json_decode($data, true); 
 			$this->validform($data);
-			$info['billNo']      = str_no('QTCK');
+			//str_no('QTCK');
+			$info = [];
+			$info['billNo']      = $data['billNo'];
 			$info['buId']        = intval($data['buId']);
 			$info['billDate']    = $data['date'];
 			$info['description'] = $data['description'];
@@ -645,9 +649,12 @@ class InvOi extends CI_Controller {
 			$v = '';
 			$this->db->trans_begin();
 			$iid = $this->mysql_model->insert(INVOICE,$info);
+			// str_alert(-1,'系統錯'.$iid,  $iid); 
 			if (is_array($data['entries'])) {
-			     $cost  = $this->data_model->get_invoice_info_ini('and billDate<"'.$info['billDate'].'" group by invId,locationId'); 
-			     foreach ($data['entries'] as $arr=>$row) {
+			    $cost  = $this->data_model->get_invoice_info_ini('and billDate<"'.$info['billDate'].'" group by invId,locationId'); 
+				// str_alert(-1,'系統錯誤22',  $cost); 
+
+			    foreach ($data['entries'] as $arr=>$row) {
 				     $price = isset($cost['invpurunitcost'][$row['invId']][$row['locationId']]) ? $cost['invpurunitcost'][$row['invId']][$row['locationId']] : 0;
 					 $amount = $row['qty'] * abs($price);
 					 $v[$arr]['iid']           = $iid;
@@ -666,17 +673,18 @@ class InvOi extends CI_Controller {
 					 $v[$arr]['price']         = abs($price);  
 					 $v[$arr]['description']   = $row['description'];  
 				}  
-				 $this->mysql_model->insert(INVOICE_INFO,$v);
+				$this->mysql_model->insert(INVOICE_INFO, $v);
 			 }
 			 
 			 if ($this->db->trans_status() === FALSE) {
 			    $this->db->trans_rollback();
-				str_alert(-1,'SQL错误回滚'); 
+				str_alert(-1,'系統錯誤'); 
 			 } else {
 			    $info['entries'] = $v;
 			    $this->db->trans_commit();
 				$this->common_model->logs('新增其他出库 单据编号：'.$info['billNo']);
-				str_alert(200,'success',$data); 
+				// str_alert(200,'success',$data); 
+				str_alert(200, 'success', array('id' => intval($iid), 'billNo'=>str_no('QTCK')));
 			 }
 		}
 		str_alert(-1,'提交的是空数据'); 
@@ -739,7 +747,7 @@ class InvOi extends CI_Controller {
 			 
 			 if ($this->db->trans_status() === FALSE) {
 			    $this->db->trans_rollback();
-				str_alert(-1,'SQL错误回滚'); 
+				str_alert(-1,'系統錯誤'); 
 			 } else {
 			    $this->db->trans_commit();
 				$this->common_model->logs('修改其他出库 单据编号：'.$invoice['billNo']);
@@ -954,7 +962,7 @@ class InvOi extends CI_Controller {
 			 
 			 if ($this->db->trans_status() === FALSE) {
 			    $this->db->trans_rollback();
-				str_alert(-1,'SQL错误回滚'); 
+				str_alert(-1,'系統錯誤'); 
 			 } else {
 			    $this->db->trans_commit();
 				$this->common_model->logs('单据编号：'.$invoice['billNo'].'的单据已被审核！');
@@ -1017,7 +1025,7 @@ class InvOi extends CI_Controller {
 			 
 			 if ($this->db->trans_status() === FALSE) {
 			    $this->db->trans_rollback();
-				str_alert(-1,'SQL错误回滚'); 
+				str_alert(-1,'系統錯誤'); 
 			 } else {
 			    $this->db->trans_commit();
 				$this->common_model->logs('单据编号：'.$invoice['billNo'].'的单据已被审核！');
@@ -1116,7 +1124,7 @@ class InvOi extends CI_Controller {
 	    $data = $this->input->post('postData',TRUE);
 		if (strlen($data)>0) {
 		   $data = (array)json_decode($data, true); 
-			 $info['billNo']      = str_no('CBTZ');
+			 $info['billNo']      = $data['billNo'];
 			 $info['billDate']    = $data['date'];
 			 $info['description'] = $data['description'];
 			 $info['totalAmount'] = (float)$data['totalAmount'];
@@ -1150,12 +1158,13 @@ class InvOi extends CI_Controller {
 			 
 			 if ($this->db->trans_status() === FALSE) {
 			    $this->db->trans_rollback();
-				str_alert(-1,'SQL错误回滚'); 
+				str_alert(-1,'系統錯誤'); 
 			 } else {
 			    $info['entries'] = $v;
 			    $this->db->trans_commit();
 				$this->common_model->logs('新增成本调整 单据编号：'.$info['billNo']);
-				str_alert(200,'success',$data); 
+				// str_alert(200,'success',$data); 
+				str_alert(200, 'success', array('id' => intval($iid), 'billNo'=>str_no('CBTZ')));
 			 }
 		}
 		str_alert(-1,'提交的是空数据'); 
@@ -1252,7 +1261,7 @@ class InvOi extends CI_Controller {
 			 
 			 if ($this->db->trans_status() === FALSE) {
 			    $this->db->trans_rollback();
-				str_alert(-1,'SQL错误回滚'); 
+				str_alert(-1,'系統錯誤'); 
 			 } else {
 			    $this->db->trans_commit();
 				$this->common_model->logs('修改成本调整 单据编号：'.$invoice['billNo']);
@@ -1344,12 +1353,7 @@ class InvOi extends CI_Controller {
 		$where .= strlen($goods)>0 ? ' and (b.name like "%'.$goods.'%")' : '';
 		$where .= $locationId>0 ? ' and locationId='.$locationId.'' : ''; 
 		$where .= $categoryId>0 ? ' and categoryId='.$categoryId.'' : ''; 
-		if($showZero == 1){
-			$having = '';
-		} else {
-			$having = ' HAVING qty<>0';
-		}
-		// $having = $showZero == 1 ? ' HAVING qty=0' : '';
+		$having = $showZero == 1 ? ' HAVING qty=0' : '';
 		$offset = $rows * ($page-1);
 		$data['data']['page']      = $page;
 		$data['data']['records']   = $this->data_model->get_inventory($where.' GROUP BY invId'.$having,3);   //总条数
@@ -1494,10 +1498,10 @@ class InvOi extends CI_Controller {
 				(float)$row['price'] < 0 || !is_numeric($row['price']) && str_alert(-1,'商品销售单价要为数字，请输入有效数字！'); 
 				intval($row['locationId']) < 1 && str_alert(-1,'请选择相应的仓库！'); 
 				!in_array(intval($row['locationId']),$storage) && str_alert(-1,$row['locationName'].'不存在或不可用！');
-
+				// str_alert(-1, '库存不足！', $inventory['name'].'-');
 				//库存判断
 				if ($system['requiredCheckStore']==1) {  
-				    if (intval($data['transTypeId'])==150806) {                        //其他出库才验证 
+				    if (intval($data['transTypeId'])==150806 && isset($inventory[$row['invId']]) ) {                        //其他出库才验证 
 						if (isset($inventory[$row['invId']][$row['locationId']])) {
 							$inventory[$row['invId']][$row['locationId']] < (float)$row['qty'] && str_alert(-1,$row['locationName'].$row['invName'].'商品库存不足！'); 
 						} else {

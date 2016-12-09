@@ -84,14 +84,14 @@ class Backup extends CI_Controller {
 			}
 			if ($this->db->trans_status() === FALSE) {
 			    $this->db->trans_rollback();
-				str_alert(-1,'恢复失败');   
+				str_alert(-1, '恢复失败');   
 			} else {
 			    $this->db->trans_commit();
 				$this->common_model->logs('备份与恢复,恢复文件名:'.$id);
-			    str_alert(200,'恢复成功');   
+			    str_alert(200, '恢复成功');   
 			}
 		}
-		str_alert(-1,'恢复失败');  
+		str_alert(-1, '恢复失败');  
 	}
 	
 	 

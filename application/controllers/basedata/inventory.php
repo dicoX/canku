@@ -294,7 +294,7 @@ class Inventory extends CI_Controller
             }
             if ($this->db->trans_status() === FALSE) {
                 $this->db->trans_rollback();
-                str_alert(-1, 'SQL错误回滚');
+                str_alert(-1, '系統錯誤');
             } else {
 				$data['propertys'] = (array)json_decode($data['propertys'], true);
                 $this->db->trans_commit();
@@ -363,7 +363,7 @@ class Inventory extends CI_Controller
             }
             if ($this->db->trans_status() === FALSE) {
                 $this->db->trans_rollback();
-                str_alert(-1, 'SQL错误回滚');
+                str_alert(-1, '系統錯誤');
             } else {
                 $this->db->trans_commit();
                 $this->common_model->logs('修改商品:ID=' . $id . '名称:' . $data['name']);
@@ -447,8 +447,7 @@ class Inventory extends CI_Controller
         $data['data']['total'] = 1;
 		$vs1 = array();
 		$vs2 = array();
-		// $ins = $this->data_model->get_inventory($where . ' GROUP BY invId, to_unitId HAVING qty>highQty or qty<lowQty', 2);
-		$ins = $this->data_model->get_inventory($where . ' GROUP BY invId, to_unitId', 2);
+		$ins = $this->data_model->get_inventory($where . ' GROUP BY invId, to_unitId HAVING qty>highQty or qty<lowQty', 2);
 		
 		foreach($ins as $arr => $row){
 			if(!isset($row['baseUnitId']) || null == $row['baseUnitId'] ){
@@ -505,7 +504,7 @@ class Inventory extends CI_Controller
 		
 		$sql = "SELECT * FROM ".INVOICE." WHERE {$where} order by billDate desc, modifyTime desc limit 1";
         $list = $this->mysql_model->query(INVOICE, $sql, 2);
-        $row = $list[0];
+        $row = count($list) ? $list[0] : false;
         $list = array();
         if($row){
             $where = "a.billNo = '{$row['billNo']}'";

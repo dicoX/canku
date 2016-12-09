@@ -21,11 +21,11 @@ class Mysql_model extends CI_Model {
 					break;  
 				case 2:
 					//die($query);
-					$result = $query->result_array();
+					$result = $query ? $query->result_array() : [];
 					//die($result);
 					break;  	
 				case 3:
-					$result = $query->num_rows();
+					$result = count($query);
 					break; 	
 			}
 			$this->cache->save($name,$result,$this->cache_time);
@@ -78,7 +78,7 @@ class Mysql_model extends CI_Model {
 		return $result;
 	}
 	
-	public function insert($table,$data){
+	public function insert($table, $data){
 	    if (!$data) return false;
         if (isset($data[0]) && is_array($data[0])) {
         	if ($this->db->insert_batch($table, $data)) {
@@ -91,6 +91,9 @@ class Mysql_model extends CI_Model {
         }
 		if (isset($result) && $result) {
 		    $this->cache_delete($table);
+			if($table == INVOICE){
+				$this->cache_delete(GOODS);
+			}
 			return  $result;  
 		} 
         return false;
@@ -137,7 +140,7 @@ class Mysql_model extends CI_Model {
 	
 	public function cache_delete($key) {
 	    if (is_dir($this->cache_path.$key)) {
-		    delete_files($this->cache_path.$key);
+		    unlink($this->cache_path.$key);
 		} else {
 		    $data = $this->cache->cache_info();
 			foreach ($data as $arr=>$row) {
