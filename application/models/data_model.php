@@ -49,13 +49,13 @@ class Data_model extends CI_Model{
 	//获取库存 用于判断库存是否满足
 	//分 商品、仓库、单位
 	public function get_invoice_info_inventory() {
-	    $sql = 'SELECT a.invId, a.locationId, a.unitId, b.baseUnitId, sum(a.qty), b.name as qty 
+	    $sql = 'SELECT a.invId, a.locationId, a.unitId, b.baseUnitId, sum(a.qty) as sum_qty, b.name as qty 
 			FROM '. INVOICE_INFO. ' as a 
 			left JOIN '. GOODS .' as b on a.invId = b.id 
 			group by a.invId, a.locationId, a.unitId';
 		$v = array();
 		$list = $this->mysql_model->query(INVOICE_INFO,$sql,2);
-		//str_alert(-1, '库存不足！', $list);
+		// str_alert(-1, '库存不足！', $list);
 		// 这里换算，得出总余
 		foreach($list as $arr=>$row){
 			if(!isset($row['baseUnitId']) || null == $row['baseUnitId'] ){
@@ -64,7 +64,7 @@ class Data_model extends CI_Model{
 			if(!isset($v[$row['invId']][$row['locationId']])){ //判断已有属性
 				$v[$row['invId']][$row['locationId']] = 0;
 			}
-			$qty = floatval($row['qty']);
+			$qty = floatval($row['sum_qty']);
 			$buId = $row['baseUnitId'];
 			
 			$uId = $row['unitId'];

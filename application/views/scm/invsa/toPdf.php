@@ -1,6 +1,6 @@
 <?php if(!defined('BASEPATH')) exit('No direct script access allowed');?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html xmlns="http://www.w3.org/1999/xhtml" lang=zh-cmn-Hant>
 <head>
 <title><?php echo $transType==150601 ? '出貨單' :'銷售退貨單'?></title>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
@@ -25,8 +25,8 @@
 		
 		<table width="800" align="center">
 			<tr height="15" align="left">
-				<td width="425" style="font-family:'宋体';font-size:12px;height:20px;padding-left:35px;"><?php echo $contactNo.' '.$contactName?> </td>
-				<td width="120" style="font-family:'宋体'; font-size:12px;height:20px;"><?php echo $billNo?></td>
+				<td width="550" style="text-align:left; font-family:'宋体';font-size:12px;height:20px;padding-left:25px;"><?php echo $contactNo.' '.$contactName?> </td>
+				<td width="180" style="font-family:'宋体'; font-size:12px;height:20px; padding-left: 15px;"><?php echo $billNo?></td>
 			</tr>
 			<tr height="15" align="left">
 				<?php 
@@ -35,11 +35,11 @@
 				  foreach ($array as $arr1=>$row1) {
 					  if ($row1['linkFirst']==1) {
 				?>				
-				<td style="font-family:'宋体'; font-size:12px;height:20px;padding-left:35px;"><?php echo @$row1['address']?> (Tel: <?php echo $tel?>)</td>
+				<td style="font-family:'宋体'; font-size:12px;height:20px;padding-left:25px;"><?php echo @$row1['address']?> (Tel: <?php echo $tel?>)</td>
 				<?php } else {?>
 				<td></td>
 				<?php }}}?>
-				<td style="font-family:'宋体'; font-size:12px;height:20px;"><?php echo $billDate?></td>
+				<td style="font-family:'宋体'; font-size:12px;height:20px; padding-left: 15px;"><?php echo $billDate?></td>
 			</tr>
 		</table>	
 			
@@ -87,7 +87,7 @@
 				 <?php if ($t==$countpage) {?>
 				 <tr style="height:20px">
 				  <td width="10"></td>
-					<td width="450"><?php echo $desc ?></td>
+					<td width="450" style="color:#000">備註：<?php echo $desc ?></td>
 					<td width="60"></td>
 					<td width="70"></td>
 					<td width="110" align="right" style="font-family:'黑体'; font-size:14px;"><strong><?php echo str_money(abs($totalAmount),2)?></strong></td>

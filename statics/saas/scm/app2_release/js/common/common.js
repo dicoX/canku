@@ -2259,32 +2259,33 @@ Business.billsEvent = function(obj, type, flag){
 									goodIds.push(gid);
 								}
 							})
-							if(goodIds.length > 0){
-								var goodIdsStr = goodIds.join(",");
-								var url = '../basedata/inventory/get_goods_prices';
-								$.get(url, {'goodsIds':goodIdsStr, 'contact_id':contactId}, function(e){
-									if(e.status == 200){
-										$.each(e.data, function(i, n){
-											var tr = _this.find('.gid-' + n.goods_id).parents('tr');
-											//console.log(tr.find('td[aria-describedby="grid_price"]').html());
-											tr.find('td[aria-describedby="grid_price"]').text(n.price);
-										})
-										var sum = 0;
-										_this.find('td[aria-describedby="grid_gid"]').each(function(i){
-											var gid = $(this).text();
+							// if(goodIds.length > 0){
+							if(0){
+								// var goodIdsStr = goodIds.join(",");
+								// var url = '../basedata/inventory/get_goods_prices';
+								// $.get(url, {'goodsIds':goodIdsStr, 'contact_id':contactId}, function(e){
+								// 	if(e.status == 200){
+								// 		$.each(e.data, function(i, n){
+								// 			var tr = _this.find('.gid-' + n.goods_id).parents('tr');
+								// 			//console.log(tr.find('td[aria-describedby="grid_price"]').html());
+								// 			tr.find('td[aria-describedby="grid_price"]').text(n.price);
+								// 		})
+								// 		var sum = 0;
+								// 		_this.find('td[aria-describedby="grid_gid"]').each(function(i){
+								// 			var gid = $(this).text();
 											
-											if(gid > 0){
-												var tr = $(this).parents('tr');
-												var num = tr.find('td[aria-describedby="grid_qty"]').text();
-												var price = tr.find('td[aria-describedby="grid_price"]').text();
-												var amount = num * price;
-												tr.find('td[aria-describedby="grid_amount"]').text(amount);
-												sum += amount;
-											}
-										})
-										_this.parents('.ui-jqgrid-bdiv').next('.ui-jqgrid-sdiv').find('.footrow').find('td[aria-describedby="grid_amount"]').text(sum);
-									}
-								}, 'json');
+								// 			if(gid > 0){
+								// 				var tr = $(this).parents('tr');
+								// 				var num = tr.find('td[aria-describedby="grid_qty"]').text();
+								// 				var price = tr.find('td[aria-describedby="grid_price"]').text();
+								// 				var amount = num * price;
+								// 				tr.find('td[aria-describedby="grid_amount"]').text(amount);
+								// 				sum += amount;
+								// 			}
+								// 		})
+								// 		_this.parents('.ui-jqgrid-bdiv').next('.ui-jqgrid-sdiv').find('.footrow').find('td[aria-describedby="grid_amount"]').text(sum);
+								// 	}
+								// }, 'json');
 							}else{ //获取上一次记录
                                 var url = '../basedata/inventory/get_last_invoice_info';
                                 $.get(url, {'contact_id':contactId}, function(e){
@@ -2292,6 +2293,17 @@ Business.billsEvent = function(obj, type, flag){
                                         var sum = 0;
                                         var num = 0;
 										var total = 0;
+
+										_this.find('tr').find('td[aria-describedby="grid_gid"]').text('');
+										_this.find('tr').find('td[aria-describedby="grid_goods"]').text('');
+										_this.find('tr').find('td[aria-describedby="grid_discountRate"]').text('');
+										_this.find('tr').find('td[aria-describedby="grid_deduction"]').text('');
+										_this.find('tr').find('td[aria-describedby="grid_mainUnit"]').text('');
+										_this.find('tr').find('td[aria-describedby="grid_locationName"]').text('');
+										_this.find('tr').find('td[aria-describedby="grid_qty"]').text('');
+										_this.find('tr').find('td[aria-describedby="grid_price"]').text('');
+										_this.find('tr').find('td[aria-describedby="grid_amount"]').text('');
+
 										$.each(e.data, function(i, n){
                                             i += 1;
 											var tr = _this.find('tr').eq(i);

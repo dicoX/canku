@@ -784,7 +784,7 @@ class InvSa extends CI_Controller
 							// str_alert(-1, "23" , $inventory);
 							$inv = $inventory[$row['invId']][$row['locationId']];
 							if((int)$row['unitId'] == (int)$row['old_unitId']){ // 判断单位是否一样
-								// str_alert(-1, $row['invName'] . '库存不足！', $inventory);
+								// str_alert(-1, $inv. $row['invName'] . '库存不足！', $inventory);
 								$inv < (float)$row['qty'] && str_alert(-1, $row['locationName'] . $row['invName'] . '商品库存不足！', $row['invId']);
 							}else{
 								//TODO: 分析库存

@@ -93,8 +93,12 @@ function initValidator() {
 function postData() {
 	if (!$("#manage-form").validate().form()) return void $("#manage-form").find("input.valid-error").eq(0).focus();
 	var rate=[];
+	var tlate = [];
 	$.each($('.unit'),function () {
-		rate.push({id:$(this).attr('data-id'),rate:$(this).val()});
+		rate.push({
+			id : $(this).attr('data-id'), 
+			rate : $(this).val()
+		});
 	});
 
 	var a = $.trim($("#name").val()),
@@ -157,7 +161,8 @@ function initUnit() {
 				var data = data.data;
 				var str = '';
 				for (var i in data) {
-					str += data[i].name + ':<input class="unit" data-id="' + data[i].id + '" value="'+data[i].discount+'"><br/>';
+					// str += data[i].name + ':<input class="unit" data-id="' + data[i].id + '" value="'+data[i].discount+'" style="width:50px;">'+ ' 比率 :<input class="tlate" data-iid="' + data[i].id + '" value="'+data[i].translate+'" style="width:50px;"><br/>';
+					str += data[i].name + ':<input class="unit" data-id="' + data[i].id + '" value="'+Number(data[i].discount)+'" style="width:50px;"><br/>';
 				}
 				$('.rate').parents('.row-item').show();
 				$('.rate').html(str);

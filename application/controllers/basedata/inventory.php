@@ -335,13 +335,15 @@ class Inventory extends CI_Controller
                     $v[$arr]['amount'] = isset($row['amount']) ? $row['amount'] : 0;
                     $v[$arr]['skuId'] = isset($row['skuId']) ? $row['skuId'] : 0;
 					$v[$arr]['unitId'] = $info['baseUnitId'];
-                    $v[$arr]['billDate'] = '2001-01-1';
+                    $v[$arr]['billDate'] = date('Y-m-d', time()); 
                     $v[$arr]['billNo'] = '期初数量';
                     $v[$arr]['billType'] = 'INI';
                     $v[$arr]['transTypeName'] = '期初数量';
                 }
-                $this->mysql_model->delete(INVOICE_INFO, '(invId=' . $id . ') and billType="INI"');
-                $this->mysql_model->insert(INVOICE_INFO, $v);
+                // str_alert(-1, '系統錯誤', $v);
+                $this->mysql_model->delete(INVOICE_INFO, '(invId="' . $id . '") and billType="INI"');
+                $iid = $this->mysql_model->insert(INVOICE_INFO, $v);
+                // str_alert(-1, '系統錯誤'.$iid, $iid);
             }
             if (!empty($data['customerPrice'])) {
                 foreach ($data['customerPrice'] as $v) {

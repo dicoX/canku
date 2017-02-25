@@ -20,6 +20,17 @@ var THISPAGE = {
             })), this.addEvent(), setTimeout(function () {
                 $("#grid").jqGrid("nextCell", 1, 1)
             }, 10), $.cookie("BarCodeInsert") && THISPAGE.$_barCodeInsert.addClass("active"), this.goodsEdittypeInit();
+            var c = this;
+            $("#hadPay").change(function(){
+                var v = $(this).val();
+                if (Number(v)) {
+                    c.accountCombo.selectByValue(1, !1);
+                    $("#payment").val($('#discount').val())
+                } else {
+                    c.accountCombo.selectByIndex(0, 1);
+                    $("#payment").val('0')
+                }
+            })
         },
         initDom: function (a) {
             var b = this;
@@ -70,7 +81,9 @@ var THISPAGE = {
                         })
                     }
                 }
-            }), a.description && this.$_note.val(a.description), this.$_discountRate.val(a.disRate), this.$_deduction.val(a.disAmount), this.$_discount.val(a.amount), this.$_payment.val(a.rpAmount), this.$_arrears.val(a.arrears), this.$_customerFree.val(a.customerFree), requiredMoney && ($("#accountWrap").show(), this.accountCombo = SYSTEM.isAdmin !== !1 || SYSTEM.rights.SettAcct_QUERY ? Business.accountCombo($("#account"), {
+            }), a.description && this.$_note.val(a.description), this.$_discountRate.val(a.disRate), this.$_deduction.val(a.disAmount), this.$_discount.val(a.amount), this.$_payment.val(a.rpAmount), this.$_arrears.val(a.arrears), this.$_customerFree.val(a.customerFree);
+            Number(a.amount) && a.rpAmount == a.amount && $("#hadPay").val('1');
+            requiredMoney && ($("#accountWrap").show(), this.accountCombo = SYSTEM.isAdmin !== !1 || SYSTEM.rights.SettAcct_QUERY ? Business.accountCombo($("#account"), {
                 width: 112,
                 height: 300,
                 emptyOptions: !0,
@@ -1221,6 +1234,9 @@ var THISPAGE = {
                         var e = b / c * 100,
                             f = Number(parseFloat(d) + Number(a.$_customerFree.val()) - parseFloat(a.$_payment.val() || 0));
                         THISPAGE.$_discountRate.val(e.toFixed(amountPlaces)), THISPAGE.$_discount.val(d), THISPAGE.$_arrears.val(f.toFixed(amountPlaces))
+                        if( Number($("#hadPay").val()) ) {
+                            $('#payment').val(d);
+                        }
                     }
                 }).on("keypress", function (a) {
                     Public.numerical(a)
