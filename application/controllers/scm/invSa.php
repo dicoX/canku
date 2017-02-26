@@ -337,7 +337,7 @@ class InvSa extends CI_Controller
             $list = $this->data_model->get_invoice_info('and (iid=' . $id . ') order by id');
             $data['countpage'] = ceil(count($list) / $data['num']);   //共多少页
             $tel = '';
-            $desc =  '';
+            $desc =  $data['description'];
             foreach ($list as $arr => $row) {
                 if (!$tel) {
                     $uid = $row['buId'];
@@ -346,10 +346,6 @@ class InvSa extends CI_Controller
                         $l = json_decode($link);
                         $tel = $l[0]->linkMobile;
                     }
-                }
-                if (!$desc) {
-                    $desc = $row['descrip'];
-                    // var_dump($row);
                 }
                 // var_dump($row);
                 $data['list'][] = array(

@@ -274,7 +274,7 @@ class Inventory extends CI_Controller
                     $v[$arr]['price'] = isset($row['unitCost']) ? $row['unitCost'] : 0;
                     $v[$arr]['amount'] = isset($row['amount']) ? $row['amount'] : 0;
                     $v[$arr]['skuId'] = isset($row['skuId']) ? $row['skuId'] : 0;
-                    $v[$arr]['billDate'] = '2001-01-01';
+                    $v[$arr]['billDate'] = date('Y-m-d', time());
                     $v[$arr]['billNo'] = '期初數量';
                     $v[$arr]['billType'] = 'INI';
                     $v[$arr]['transTypeName'] = '期初數量';
@@ -449,7 +449,7 @@ class Inventory extends CI_Controller
         $data['data']['total'] = 1;
 		$vs1 = array();
 		$vs2 = array();
-		$ins = $this->data_model->get_inventory($where . ' GROUP BY invId, to_unitId HAVING qty>highQty or qty<lowQty', 2);
+		$ins = $this->data_model->get_inventory($where . ' GROUP BY invId', 2);
 		
 		foreach($ins as $arr => $row){
 			if(!isset($row['baseUnitId']) || null == $row['baseUnitId'] ){

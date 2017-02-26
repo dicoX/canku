@@ -43,7 +43,8 @@ class Data_model extends CI_Model{
 					(a.isDelete=0)
 					'.$where.' 
 				';
-		return $this->mysql_model->query(INVOICE_INFO,$sql,$type);		
+				// str_alert(-1, '库存不足！', $sql);
+		return $this->mysql_model->query(INVOICE_INFO, $sql, $type);		
 	}	
 	
 	//获取库存 用于判断库存是否满足
@@ -223,12 +224,10 @@ class Data_model extends CI_Model{
 		}
 	    $sql = 'select 
 		            a.*, 
-					
 					b.name as invName, b.number as invNumber, b.spec as invSpec, u.name as mainUnit, 
 					c.number as contactNo, c.name as contactName,
 					d.name as locationName ,d.locationNo ,
-					e.number as salesNo ,e.name as salesName , 
-					k.description as descrip 
+					e.number as salesNo ,e.name as salesName 
 				from '.INVOICE_INFO.' as a 
 					left join 
 						(select 
@@ -260,11 +259,10 @@ class Data_model extends CI_Model{
 					on a.salesId=e.id 	
 					left join 
 						'.UNIT.' as u on a.unitId = u.id
-					left join 
-						'.INVOICE.' as k on a.iid = k.id
 				where 
 					(a.isDelete=0 '. $w2 .' ) 
 				'.$where;
+				// str_alert(-1,'系統錯誤', $sql); 
 		return $this->mysql_model->query(INVOICE_INFO,$sql,$type); 	
 	}
 	

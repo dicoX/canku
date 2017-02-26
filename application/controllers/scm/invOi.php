@@ -283,6 +283,7 @@ class InvOi extends CI_Controller {
 			$info['data']['transType']          = intval($data['transType']);
 			$info['data']['totalQty']           = (float)$data['totalQty'];
 			$info['data']['totalAmount']        = (float)$data['totalAmount'];
+			$info['data']['description']        = $data['description'];
 			$info['data']['userName']           = $data['userName'];
 			$info['data']['amount']             = (float)abs($data['totalAmount']);
 			$info['data']['checked']            = intval($data['checked']); 
@@ -777,6 +778,7 @@ class InvOi extends CI_Controller {
 			$info['data']['transType']          = intval($data['transType']);
 			$info['data']['totalQty']           = (float)$data['totalQty'];
 			$info['data']['totalAmount']        = (float)$data['totalAmount'];
+			$info['data']['description']           = $data['description'];
 			$info['data']['userName']           = $data['userName'];
 			$info['data']['amount']             = (float)abs($data['totalAmount']);
 			$info['data']['checked']            = intval($data['checked']); 

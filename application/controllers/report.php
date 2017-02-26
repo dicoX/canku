@@ -1328,7 +1328,6 @@ class Report extends CI_Controller {
         $hxStateCode = $this->input->get('hxStateCode', true);
         $goodsNo = $this->input->get('goodsNo', true);
         $storageNo = $this->input->get('storageNo', true);
-		$transTypeName = $this->input->get('transTypeName', true);
         
         $where = ' 1 ';
         $where .= ' and a.billType = "SALE"';
@@ -1338,7 +1337,6 @@ class Report extends CI_Controller {
         if(strlen($hxStateCode) > 0) $where .= " and a.hxStateCode = '{$hxStateCode}'";
         if($goodsNo) $where .= ' and d.number in('.str_quote($goodsNo).') ';
         if($storageNo) $where .= " and e.id = '{$storageNo}'";
-		if($transTypeName) $where .= " and c.transTypeName = '{$transTypeName}'";
 
         $order = ' a.billDate desc ';
         $group = ' a.billNo ';
@@ -1410,7 +1408,6 @@ class Report extends CI_Controller {
         $hxStateCode = $this->input->post('hxStateCode', true);
         $goodsNo = $this->input->post('goodsNo', true);
         $storageNo = $this->input->post('storageNo', true);
-		$transTypeName = $this->input->get('transTypeName', true);
         
         $where = ' 1 ';
         $where .= ' and a.billType = "SALE"';
@@ -1420,7 +1417,6 @@ class Report extends CI_Controller {
         if(strlen($hxStateCode) > 0) $where .= " and a.hxStateCode = '{$hxStateCode}'";
         if($goodsNo) $where .= ' and d.number in('.str_quote($goodsNo).') ';
         if($storageNo) $where .= " and e.id = '{$storageNo}'";
-		if($transTypeName) $where .= " and c.transTypeName = '{$transTypeName}'";
         
         $order = ' a.billDate desc ';
         $group = ' a.billNo ';

@@ -801,7 +801,7 @@ var curRow, curCol, curArrears, loading, urlParam = Public.urlParam(),
 						}
 					}
 					f = {
-						invId: i.id,
+						invId: i.gid,
 						invNumber: i.number,
 						invName: i.name,
 						invSpec: i.spec,

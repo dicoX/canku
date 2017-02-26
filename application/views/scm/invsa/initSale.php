@@ -115,7 +115,7 @@ $(document).keydown(function(event) {
         </li>
         <li>
           <label>收款情况：</label>
-          <select name="hadPay" id="hadPay" class='ui-input'>
+          <select name="hadPay" id="hadPay" style="height:30px;" class='ui-input'>
             <option value='0'>未收款</option>
             <option value='1'>已收款</option>
           </select>
