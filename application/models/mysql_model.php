@@ -93,6 +93,9 @@ class Mysql_model extends CI_Model {
 		    $this->cache_delete($table);
 			if($table == INVOICE){
 				$this->cache_delete(GOODS);
+				// $this->cache_delete(INVOICE_INFO);
+				// $this->cache_delete(STORAGE);
+				// $this->cache_delete(STAFF);
 			}
 			return  $result;  
 		} 

@@ -449,7 +449,7 @@ class Inventory extends CI_Controller
         $data['data']['total'] = 1;
 		$vs1 = array();
 		$vs2 = array();
-		$ins = $this->data_model->get_inventory($where . ' GROUP BY invId', 2);
+		$ins = $this->data_model->get_inventory($where . ' GROUP BY invId, to_unitId HAVING qty>highQty or qty<lowQty', 2);
 		
 		foreach($ins as $arr => $row){
 			if(!isset($row['baseUnitId']) || null == $row['baseUnitId'] ){
