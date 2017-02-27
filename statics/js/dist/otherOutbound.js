@@ -637,7 +637,7 @@ var curRow, curCol, curArrears, loading, urlParam = Public.urlParam(),
 				d && ("edit" === originalData.stata && (d.id = originalData.id, d.stata = "edit"), c.addClass("ui-btn-dis"), Public.ajaxPost("../scm/invOi/addOo?action=addOo&type=out", {
 					postData: JSON.stringify(d)
 				}, function(b) {
-					c.removeClass("ui-btn-dis"), 200 === b.status ? (originalData.id = b.data.id, urlParam.id = b.data.id, THISPAGE.reloadData(b.data), a.$_toolBottom.html(billRequiredCheck ? a.btn_edit + a.btn_audit : a.btn_edit), parent.Public.tips({
+					c.removeClass("ui-btn-dis"), 200 === b.status ? (originalData.id = b.data.id, urlParam.id = b.data.id, a.$_toolBottom.html(billRequiredCheck ? a.btn_edit + a.btn_audit : a.btn_edit), parent.Public.tips({
 						content: "儲存完畢！"
 					}), originalData.callback && originalData.callback("out")) : parent.Public.tips({
 						type: 1,

@@ -641,6 +641,7 @@ var curRow, curCol, loading, urlParam = Public.urlParam(),
 				}, 10)
 			}), Business.billsEvent(a, "otherWarehouse"), $(".wrapper").on("click", "#save", function(b) {
 				b.preventDefault();
+				var c = THISPAGE.getPostData();
 				c && ("edit" === originalData.stata && (c.id = originalData.id, c.stata = "edit"), Public.ajaxPost("../scm/invOi/add?action=add&type=in", {
 					postData: JSON.stringify(c)
 				}, function(b) {
